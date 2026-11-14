@@ -1,26 +1,629 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Brand system (light only). Use these tokens everywhere;
+   never hardcode hex values or font-family in components.
+
+   Font
+     Inter for everything (headings, body, UI).
+
+   Colors
+     Background        #FFFFFF
+     Primary text      #061B31   headings and body
+     Secondary text    #64748D   supporting copy, labels, captions (4.8:1 on bg)
+     Guide lines       #E5EDF5   very light page rules
+     Primary accent    #1C257D   logo, primary buttons, borders of CTAs
+     Secondary accent  #F59E0B   amber: highlights, markers, badges (never body text)
+     Tertiary accent   #0B1251   focus rings, rare fine details; least used
+
+   Brand gradient (navy → amber, passes through near-white so it never goes muddy)
+     #1C257D  #3B47C4  #6B7BE6  #A5B1F5  #E4E8FD  #FFF1D6  #FCD38A  #F59E0B
+
+   Product colors (logo tiles only, never text or buttons)
+     Marg #4F7CF6  Spardha #EE9A3A  Riyaaz #2FA58F  Kaksha #E5486A  Setu #7A5CF5
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  --bg: #FFFFFF;
+  --text: #061B31;
+  --text-muted: #64748D;
+  --accent: #1C257D;
+  --highlight: #F59E0B;
+  --tertiary: #0B1251;
+
+  /* Derived from the colors above. */
+  --surface: color-mix(in srgb, var(--accent) 4%, var(--bg));
+  --surface-2: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  --border: color-mix(in srgb, var(--accent) 13%, var(--bg));
+  --line: #E5EDF5;
+  --text-soft: #50617A;                                                /* dropdown descriptions */
+  --surface-subdued: #F8FAFD;                                          /* tinted side column */                                                     /* page guide lines */
+  --border-strong: color-mix(in srgb, var(--text) 45%, var(--bg));
+  --accent-hover: var(--tertiary);
+  --on-accent: var(--bg);
+  --on-highlight: var(--text);
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--tertiary);
+  --shadow-btn: 0 0 0 1px var(--line), 0 1px 2px color-mix(in srgb, var(--accent) 8%, transparent);
+  --shadow-menu: 0 50px 100px -20px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 30px 60px -30px color-mix(in srgb, var(--accent) 28%, transparent);
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+
+  /* Brand gradient ramp: navy → periwinkle → near-white → amber. */
+  --g-navy: #1C257D;
+  --g-indigo: #3B47C4;
+  --g-periwinkle: #6B7BE6;
+  --g-lavender: #A5B1F5;
+  --g-mist: #E4E8FD;
+  --g-cream: #FFF1D6;
+  --g-honey: #FCD38A;
+  --g-amber: #F59E0B;
+  --highlight-soft: var(--g-honey);                                    /* highlighter strokes */
+
+  /* Product logo gradients: light top, deeper bottom. */
+  --p-marg-1: #5B8AF9;    --p-marg-2: #3461E0;
+  --p-spardha-1: #F4A949; --p-spardha-2: #D97A1E;
+  --p-riyaaz-1: #3BB59D;  --p-riyaaz-2: #1F8A76;
+  --p-kaksha-1: #EF5C7B;  --p-kaksha-2: #C93355;
+  --p-setu-1: #8A6CFA;    --p-setu-2: #5B3FE0;
+
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-highlight: var(--highlight);
+  --color-on-highlight: var(--on-highlight);
+  --color-tertiary: var(--tertiary);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-line: var(--line);
+  --color-text-soft: var(--text-soft);
+  --color-surface-subdued: var(--surface-subdued);
+
+  --font-sans: var(--sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: var(--bg);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--sans);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+
+  h1 {
+    font-size: clamp(40px, 6vw, 68px);
+    letter-spacing: -0.035em;
+  }
+
+  h2 {
+    font-size: clamp(30px, 4.2vw, 44px);
+  }
+
+  h3 {
+    font-size: 23px;
+  }
+
+  p {
+    max-width: 62ch;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  input,
+  select,
+  textarea {
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Buttons: 4px radius, 1px border, 0.24s colour transitions. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 11.5px 20px 12.5px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+    white-space: nowrap;
+    transition:
+      color 0.24s var(--ease-in-out),
+      background-color 0.24s var(--ease-in-out),
+      border-color 0.24s var(--ease-in-out);
+  }
+  .btn-lg {
+    padding: 14.5px 24px 15.5px;
+    font-size: 16px;
+    line-height: 16px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+  .btn-secondary {
+    background: var(--bg);
+    border-color: var(--bg);
+    color: var(--accent);
+  }
+  .btn-secondary:hover {
+    color: var(--tertiary);
+    border-color: var(--tertiary);
+  }
+
+  /* Arrow that grows a stem and nudges right when its parent is hovered. */
+  .hover-arrow {
+    margin-left: 8px;
+    position: relative;
+    top: 1px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  .hover-arrow__line {
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-out);
+  }
+  .hover-arrow__tip {
+    transition: transform 0.3s var(--ease-out);
+  }
+  .hover-arrow--reveal {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity 0.2s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+  :is(a, button):is(:hover, :focus-visible) .hover-arrow__line {
+    opacity: 1;
+  }
+  :is(a, button):is(:hover, :focus-visible) .hover-arrow__tip {
+    transform: translateX(3px);
+  }
+  :is(a, button):is(:hover, :focus-visible) .hover-arrow--reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------------------------------------------------------------
+     Navigation, matched to stripe.com's nav styles.
+     --------------------------------------------------------------- */
+  .nav-row {
+    --nav-ease: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    --nav-radius: 6px;
+    --nav-inset: 6px;
+    --nav-card-height: 52px; /* 64px row minus 6px top and bottom */
+    /* Hover rule under product column titles: indigo -> periwinkle -> yellow. */
+    --nav-rule-1: #1C257D;
+    --nav-rule-2: #C2D1FF;
+    --nav-rule-3: var(--highlight);
+  }
+
+  /* Fixed header: transparent over the hero, white once scrolled or while the mobile menu is open.
+     The background lives on ::before so the header itself never becomes a containing block
+     for the fixed overlay and mobile sheet inside it. */
+  .nav-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--bg) 0%, transparent);
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color 240ms var(--ease-in-out),
+      border-color 240ms var(--ease-in-out),
+      backdrop-filter 240ms var(--ease-in-out);
+  }
+  .nav-shell[data-scrolled]::before {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom-color: var(--line);
+  }
+  .nav-shell:has(.menu-toggle[aria-expanded="true"])::before {
+    background: var(--bg);
+    border-bottom-color: var(--line);
+  }
+
+  /* Top-level options. While a menu is open, the others dim. */
+  .nav-trigger {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--text);
+    transition: color 240ms var(--nav-ease);
+  }
+  .nav-list[data-open] .nav-trigger:not([aria-expanded="true"]) {
+    color: var(--text-muted);
+  }
+  .nav-chevron {
+    transition: transform 300ms var(--nav-ease);
+  }
+  .nav-trigger[aria-expanded="true"] .nav-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* White card behind the navbar: fades in on navbar hover (after 0.1s) and while open. */
+  .nav-card {
+    position: absolute;
+    z-index: -1;
+    top: var(--nav-inset);
+    left: var(--nav-inset);
+    right: var(--nav-inset);
+    height: var(--nav-card-height);
+    pointer-events: none;
+    background: var(--bg);
+    border-radius: var(--nav-radius);
+    box-shadow:
+      0 30px 60px -50px rgb(0 0 0 / 0.1),
+      0 30px 60px -10px rgb(50 50 93 / 0.25);
+    opacity: 0;
+    transition:
+      opacity 240ms var(--nav-ease),
+      border-radius 240ms var(--nav-ease);
+  }
+  .nav-row:hover .nav-card {
+    opacity: 1;
+    transition-delay: 0.1s;
+  }
+  .nav-card[data-open] {
+    opacity: 1;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition-delay: 0s;
+  }
+
+  /* Dropdown: attached under the card, wipes open with clip-path, height follows the menu. */
+  .nav-popup {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--nav-inset) + var(--nav-card-height));
+    left: var(--nav-inset);
+    right: var(--nav-inset);
+    background: var(--bg);
+    color: var(--text);
+    border-top: 1px solid var(--line);
+    border-bottom-left-radius: var(--nav-radius);
+    border-bottom-right-radius: var(--nav-radius);
+    box-shadow:
+      0 18px 36px -18px rgb(0 0 0 / 0.1),
+      0 30px 45px -30px rgb(50 50 93 / 0.25);
+    overflow: clip;
+    pointer-events: none;
+    clip-path: inset(0 -60px 100% -60px round 0 0 var(--nav-radius) var(--nav-radius));
+    transition:
+      clip-path 200ms var(--nav-ease),
+      height 300ms var(--nav-ease);
+  }
+  .nav-popup[data-open] {
+    pointer-events: auto;
+    clip-path: inset(0 -60px -60px -60px round 0 0 var(--nav-radius) var(--nav-radius));
+  }
+
+  /* Each menu's contents: stacked, cross-fade and slide 20% when switching. */
+  .nav-panel {
+    position: absolute;
+    inset: 0 0 auto 0;
+    opacity: 0;
+    transform: translateX(calc(var(--side, 0) * 20%));
+    transition:
+      opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .nav-panel[data-active] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Page overlay under the open menu: soft gradient and blur. */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(transparent, rgb(236 239 241 / 0.8));
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms var(--nav-ease);
+  }
+  .nav-overlay[data-open] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Section title with a gradient rule that sweeps in on hover (products). */
+  .nav-section-title {
+    position: relative;
+  }
+  .nav-section-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 12px);
+    height: 1px;
+    border-radius: 1px;
+    background:
+      linear-gradient(90deg, var(--nav-rule-1) 0%, var(--nav-rule-1) 20%, var(--nav-rule-2) 50%, var(--nav-rule-3) 80%, var(--nav-rule-3) 100%),
+      var(--line);
+    background-size: 0 100%, 100% 100%;
+    background-position: left, 0;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease-out;
+  }
+  .nav-section:hover .nav-section-title::after {
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  /* Menu links: description darkens on hover. */
+  .nav-link__desc {
+    color: var(--text-soft);
+    transition: color 240ms var(--nav-ease);
+  }
+  .nav-link:hover .nav-link__desc,
+  .nav-link:focus-visible .nav-link__desc {
+    color: var(--text);
+  }
+
+  /* Neutral icon tile for non-product links. */
+  .nav-icon {
+    background: var(--surface-subdued);
+    color: var(--text-soft);
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition:
+      color 240ms var(--nav-ease),
+      box-shadow 240ms var(--nav-ease),
+      background-color 240ms var(--nav-ease);
+  }
+  .nav-link:hover .nav-icon,
+  .nav-link:focus-visible .nav-icon {
+    background: var(--bg);
+    color: var(--accent);
+    box-shadow:
+      inset 0 0 0 1px var(--border),
+      0 2px 6px -2px rgb(50 50 93 / 0.18);
+  }
+
+  /* Highlighter-style marker in the secondary accent. */
+  .mark {
+    background: linear-gradient(transparent 60%, var(--highlight-soft) 60%, var(--highlight-soft) 90%, transparent 90%);
+    padding: 0 0.06em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* Digit that rolls in when the live counter changes. */
+  .digit-in {
+    display: inline-block;
+    animation: digit-in 0.45s var(--ease-out);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Hero globe (cobe + our own dot layer, see src/components/hero-globe.tsx).
+   --------------------------------------------------------------- */
+.hero-globe-canvas {
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-out);
+}
+.hero-globe-canvas.is-ready {
+  opacity: 1;
+}
+/* Faint aura behind the sphere, pushed to the bottom-left where the light comes from. */
+.hero-globe-aura {
+  background: radial-gradient(circle at 30% 72%, var(--g-lavender), var(--g-mist) 45%, transparent 70%);
+  filter: blur(60px);
+  opacity: 0.4;
+  translate: -8% 8%;
+}
+
+/* ---------------------------------------------------------------
+   Partner logo ticker (hero bottom), modelled on stripe.com.
+   --------------------------------------------------------------- */
+.logo-ticker {
+  overflow: hidden;
+  height: 72px;
+  display: flex;
+  align-items: center;
+}
+.logo-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: logo-ticker 70s linear infinite;
+}
+.logo-ticker-row {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.logo-ticker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+}
+.logo-ticker-item img {
+  height: 40px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+}
+@keyframes logo-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (max-width: 640px) {
+  .logo-ticker {
+    height: 60px;
+  }
+  .logo-ticker-item {
+    padding: 0 22px;
+  }
+  .logo-ticker-item img {
+    height: 28px;
+    max-width: 120px;
+  }
+}
+
+/* Company tags pinned to the globe (positioned from JS). Styled like the
+   page's cards: white, hairline border, small radius, navy text. */
+.globe-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 5px 4px 9px;
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 8px 18px -10px color-mix(in srgb, var(--accent) 35%, transparent);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+/* Hairline stem from the tag down to its pin. */
+.globe-tag::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 8px;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.globe-tag-name {
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+.globe-tag-count {
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--g-cream);
+  color: #92400e; /* deep amber: readable text on cream */
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.globe-tag--origin {
+  padding: 5px 10px;
+  background: var(--accent);
+  box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.globe-tag--origin .globe-tag-name {
+  color: var(--on-accent);
+}
+.globe-tag--origin::after {
+  height: 12px;
+  background: var(--accent);
+}
+@media (max-width: 640px) {
+  .globe-tag {
+    font-size: 10px;
+    padding: 3px 4px 3px 7px;
+  }
+  .globe-tag-count {
+    padding: 2px 4px;
+  }
+}
+
+/* Hero copy sits over the globe: a soft white halo keeps it legible. */
+.hero-copy h1 {
+  text-shadow:
+    0 0 18px var(--bg),
+    0 0 6px var(--bg);
+}
+
+@keyframes digit-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digit-in,
+  .logo-ticker-track {
+    animation: none;
+  }
+}
+
+/* Product logo tile: soft gradient squircle, glassy top edge, coloured shadow. */
+.product-tile {
+  --c1: var(--p-marg-1);
+  --c2: var(--p-marg-2);
+  background: linear-gradient(180deg, var(--c1), var(--c2));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    inset 0 -1px 0 rgb(0 0 0 / 0.08),
+    0 1px 2px color-mix(in srgb, var(--c2) 40%, transparent),
+    0 4px 10px -4px color-mix(in srgb, var(--c2) 55%, transparent);
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out);
+}
+.product-tile--spardha { --c1: var(--p-spardha-1); --c2: var(--p-spardha-2); }
+.product-tile--riyaaz { --c1: var(--p-riyaaz-1); --c2: var(--p-riyaaz-2); }
+.product-tile--kaksha { --c1: var(--p-kaksha-1); --c2: var(--p-kaksha-2); }
+.product-tile--setu { --c1: var(--p-setu-1); --c2: var(--p-setu-2); }
+a:hover > .product-tile,
+a:focus-visible > .product-tile {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    inset 0 -1px 0 rgb(0 0 0 / 0.08),
+    0 2px 4px color-mix(in srgb, var(--c2) 35%, transparent),
+    0 10px 20px -6px color-mix(in srgb, var(--c2) 60%, transparent);
 }
