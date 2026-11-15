@@ -196,7 +196,7 @@ function Panel({ group, onNavigate }: { group: NavGroup; onNavigate: () => void 
 
 function Section({ section, divided, onNavigate }: { section: NavSection; divided: boolean; onNavigate: () => void }) {
   return (
-    <section className={`nav-section w-[296px] shrink-0 px-8 pt-8 pb-12 ${divided ? "border-l border-line" : ""}`}>
+    <section className={`nav-section w-[336px] shrink-0 px-8 pt-8 pb-12 ${divided ? "border-l border-line" : ""}`}>
       <p className={`text-[14px] text-text-muted ${section.accent ? "nav-section-title" : ""}`}>{section.title}</p>
       <ul className="mt-6 flex flex-col gap-4">
         {section.items.map((item) => (
@@ -224,7 +224,11 @@ function MenuLink({ item, onNavigate }: { item: NavItem; onNavigate: () => void 
           {item.label}
           <HoverArrow reveal />
         </span>
-        {item.description && <span className="nav-link__desc block text-[14px] leading-5">{item.description}</span>}
+        {item.description && (
+          <span className={`nav-link__desc block text-[14px] leading-5 ${item.nowrapDescription ? "whitespace-nowrap" : ""}`}>
+            {item.description}
+          </span>
+        )}
       </span>
     </Link>
   );

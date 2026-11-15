@@ -10,7 +10,7 @@ export const site = {
   email: "techcityskillspvt.ltd@gmail.com",
   phone: "+91 96506 57821",
   phoneE164: "+919650657821",
-  logo: "/techcity-logo.png",
+  logo: "/techcity-logo-bold.png",
   themeColor: "#FFFFFF",
   areaServed: ["Delhi NCR", "Faridabad", "Noida", "Lucknow", "Ambala", "Haryana", "Uttar Pradesh", "Punjab", "Bihar"],
   products: [

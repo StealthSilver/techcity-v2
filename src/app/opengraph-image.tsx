@@ -31,7 +31,7 @@ const stats = [
 ] as const;
 
 export default async function OpengraphImage() {
-  const logo = await readFile(join(process.cwd(), "public/techcity-logo.png"));
+  const logo = await readFile(join(process.cwd(), `public${site.logo}`));
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
 
   const headingText = `${site.name}${site.tagline}${stats.map((s) => s[0]).join("")}`;

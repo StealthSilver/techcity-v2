@@ -6,6 +6,7 @@ export type NavItem = {
   href: string;
   /** Short line under the label (a few words). */
   description?: string;
+  nowrapDescription?: boolean;
   icon?: IconName;
   product?: ProductId;
 };
@@ -47,7 +48,7 @@ const productSections: NavSection[] = [
     accent: true,
     items: [
       { label: "Spardha", product: "spardha", description: "Tests and campus contests", href: "/products/spardha" },
-      { label: "Marg", product: "marg", description: "Learning paths and roadmaps", href: "/products/marg" },
+      { label: "Marg", product: "marg", description: "Learning paths and roadmaps", nowrapDescription: true, href: "/products/marg" },
     ],
   },
   {
@@ -56,7 +57,7 @@ const productSections: NavSection[] = [
     items: [
       { label: "Setu", product: "setu", description: "Learning management", href: "/products/setu" },
       { label: "Riyaaz", product: "riyaaz", description: "Daily coding practice", href: "/products/riyaaz" },
-      { label: "Kaksha", product: "kaksha", description: "Cohort-based video courses", href: "/products/kaksha" },
+      { label: "Kaksha", product: "kaksha", description: "Cohort-based video courses", nowrapDescription: true, href: "/products/kaksha" },
     ],
   },
 ];
@@ -140,6 +141,19 @@ export const partnerNav: NavConfig = {
         },
       ],
       aside: { title: "Get in touch", links: [{ label: "Contact us", href: "#contact" }] },
+    },
+    {
+      label: "Partners",
+      sections: [
+        {
+          title: "Partner with us",
+          items: [
+            { label: "Colleges", icon: "platform", description: "Bring skilling to your campus", nowrapDescription: true, href: "/partners/colleges" },
+            { label: "Industry", icon: "briefcase", description: "Connect with emerging talent", nowrapDescription: true, href: "/partners/industry" },
+          ],
+        },
+      ],
+      aside: { title: "Build together", links: [{ label: "Start a conversation", href: "#contact" }] },
     },
     contact,
   ],

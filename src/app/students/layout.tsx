@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { studentNav } from "@/lib/nav";
 
@@ -6,6 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <Navbar nav={studentNav} />
       {children}
+      <Footer audience="students" />
     </>
   );
 }
