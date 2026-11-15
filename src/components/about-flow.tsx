@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { container } from "@/lib/layout";
 
 /*
- * About: Build → Deliver → Improve. A scroll-triggered particle story modelled
- * on the flow on giga.ai, drawn in our own colours on the light page (navy,
- * indigo, periwinkle, honey and amber from the brand ramp).
+ * Our mission: Build → Deliver → Improve. A scroll-triggered particle story modelled
+ * on the flow on giga.ai, glowing on the brand-navy stage (the footer's colour)
+ * (mist, lavender, periwinkle, sky, honey and amber).
  *
  * How it moves (like giga): scroll only picks the *target* step. A story clock
  * `s` then eases towards it at its own pace (about 1.3 s per step), so every
@@ -26,15 +24,28 @@ import { container } from "@/lib/layout";
  */
 
 const STEPS = 9;
-const STEP_SECONDS = 1.3;
 
-// Our palette on white (the brand navy and --g-* ramp in globals.css), as "r, g, b".
-const INK = "28, 37, 125";
-const LAVENDER = "107, 123, 230";
-const PERI = "59, 71, 196";
-const HONEY = "236, 164, 40";
+// Our palette on the brand-navy stage (#1C257D, same as the footer), as "r, g, b".
+// Drawn additively, so pale tints glow; kept light enough to read on navy.
+const INK = "228, 232, 253"; // mist: strands, node, chart rules
+const LAVENDER = "165, 177, 245";
+const PERI = "170, 184, 255";
+const SKY = "150, 214, 255";
+const HONEY = "252, 211, 138";
 const AMBER = "245, 158, 11";
-const PALETTE = [INK, LAVENDER, PERI, HONEY, AMBER];
+const PALETTE = [INK, LAVENDER, PERI, SKY, HONEY, AMBER];
+
+// Improve: the dot chart warms from cool to amber as it rises left to right.
+const CHART_TINTS = [PERI, PERI, LAVENDER, SKY, HONEY, AMBER];
+
+// One short line per stage of the story, shown at the top of the stage.
+const CAPTIONS = [
+  "We bring industry knowledge, training and guidance to your campus.",
+  "It all runs inside your college, on your timetable.",
+  "Week after week, practice turns into consistency.",
+  "Every batch leaves more job-ready than the last.",
+  "What works stays on campus, for every batch that follows.",
+];
 
 const GROUPS = [
   { label: "Knowledge", rows: 12, y: 0.3, tint: LAVENDER },
@@ -42,12 +53,12 @@ const GROUPS = [
   { label: "Guidance", rows: 12, y: 0.82, tint: HONEY },
 ];
 const COLS = 4;
-const COL_ALPHA = [0.34, 0.2, 0.12, 0.07];
+const COL_ALPHA = [0.3, 0.19, 0.11, 0.06];
 
 const LANES = [
   { label: "Trainers", color: LAVENDER },
   { label: "Faculty sessions", color: PERI },
-  { label: "Labs", color: INK },
+  { label: "Labs", color: SKY },
   { label: "Placement prep", color: HONEY },
   { label: "Mentorship", color: AMBER },
 ];
@@ -60,7 +71,7 @@ const PHASES = [
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const inOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const outExpo = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
+const outCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 type Pt = { x: number; y: number };
@@ -73,8 +84,17 @@ type Particle = {
   slab: V3;
   grid: V3;
   line: V3;
+  chart: V3;
+  /** 0..1 across the lanes: dots further right sit tighter on the grid. */
+  laneT: number;
+  /** Chart colour, and 0..1 height within its column (top edge = 1). */
+  chartTint: string;
+  chartH: number;
+  edge: boolean;
   seed: number;
   bright: number;
+  /** 0..1: how late this particle starts each move, so the field flows instead of jumping as one. */
+  delay: number;
 };
 
 function cubic(p0: Pt, p1: Pt, p2: Pt, p3: Pt, n: number, out: Pt[]) {
@@ -118,9 +138,7 @@ export function AboutFlow() {
   const groupLabelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const laneLabelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const nodeLabelRef = useRef<HTMLDivElement>(null);
-  const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const legendRef = useRef<HTMLDivElement>(null);
-  const improveLabelRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const titleRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
@@ -131,7 +149,7 @@ export function AboutFlow() {
     if (!track || !stage || !canvas || !ctx) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const sprites = Object.fromEntries(PALETTE.map((c) => [c, sprite(c)])) as Record<string, HTMLCanvasElement>;
 
     let W = 0;
@@ -203,28 +221,52 @@ export function AboutFlow() {
       const grid = narrow ? 7 : 9;
       const gridLeft = -W * (narrow ? 0.18 : 0.3);
       const gridCols = Math.floor((W * (narrow ? 0.62 : 0.72)) / grid);
-      const count = narrow ? 700 : 1500;
+      // Improve: a dot-matrix area chart, rising left to right from the baseline.
+      const chartLeft = -W * (narrow ? 0.34 : 0.32);
+      const chartCols = Math.floor((W * (narrow ? 0.66 : 0.6)) / grid);
+      const chartMax = H * (narrow ? 0.36 : 0.42);
+      const count = narrow ? 480 : 1000;
       particles = Array.from({ length: count }, (_, i) => {
         const lane = i % LANES.length;
         // Burst: a sphere shell, denser towards the middle.
         const u = rand() * 2 - 1;
         const th = rand() * Math.PI * 2;
-        const rr = R * (0.25 + 0.75 * Math.cbrt(rand()));
+        const rr = R * (0.04 + 0.96 * Math.cbrt(rand()));
         const sq = Math.sqrt(1 - u * u);
         const c = clusters[lane];
         const sub = Math.floor(rand() * 3) - 1;
+        // Lanes: loose and scattered on the left, settling onto the grid towards the right.
+        const gc = Math.floor(Math.pow(rand(), 0.75) * gridCols);
+        const laneT = gc / Math.max(1, gridCols - 1);
+        const loose = Math.pow(1 - laneT, 1.6);
+        // Chart: pick a column, then a row up to that column's height (denser near the top).
+        const cc = Math.floor(rand() * chartCols);
+        const ct = (cc + 0.5) / chartCols;
+        const rise = 0.1 + 0.9 * (0.55 * ct + 0.45 * ct * ct * (3 - 2 * ct));
+        const rows = Math.max(1, Math.floor((rise * chartMax) / grid));
+        const edge = rand() < 0.3;
+        const row = edge ? rows - 1 : Math.floor(Math.pow(rand(), 0.6) * rows);
+        const colX = chartLeft + cc * grid;
         return {
           lane,
           sphere: { x: Math.cos(th) * sq * rr, y: u * rr * 0.62, z: Math.min(560, Math.sin(th) * sq * rr) },
           cluster: { x: c.x + gauss() * W * 0.07, y: c.y + gauss() * H * 0.06, z: c.z + gauss() * 110 },
           // Tilted plane: warm on the left, cool on the right; depth becomes height once tilted.
           slab: { x: lerp(-W * 0.4, W * 0.4, (4 - lane + rand() * 1.6) / 5.6), y: gauss() * H * 0.03, z: gauss() * 260 },
-          grid: { x: gridLeft + Math.floor(Math.pow(rand(), 0.85) * gridCols) * grid, y: laneY[lane] + sub * 7, z: 0 },
-          line: { x: lerp(-W * 0.38, W * 0.02, rand()), y: baseY, z: 0 },
+          grid: { x: gridLeft + gc * grid + gauss() * grid * 2 * loose, y: laneY[lane] + sub * 7 + gauss() * 16 * loose, z: 0 },
+          line: { x: colX, y: baseY, z: 0 },
+          chart: { x: colX, y: baseY - row * grid, z: 0 },
+          laneT,
+          chartTint: CHART_TINTS[Math.min(CHART_TINTS.length - 1, Math.floor(ct * CHART_TINTS.length))],
+          chartH: rows > 1 ? row / (rows - 1) : 1,
+          edge,
           seed: rand() * Math.PI * 2,
           bright: 0.45 + rand() * 0.55,
+          delay: rand(),
         };
       });
+      // Group by lane so the fill colour changes five times per frame, not per dot.
+      particles.sort((a, b) => a.lane - b.lane);
     };
 
     // ---- Story clock ----
@@ -254,21 +296,19 @@ export function AboutFlow() {
       const step = (k: number, f = inOut) => f(clamp01(s - k));
       const eDraw = step(0);
       const ePan = step(1);
-      const eBurst = step(2, outExpo);
-      const eGather = step(3);
+      const eBurst = step(2);
       const eFlat = step(4);
       const eLanes = step(5);
       const eLine = step(6);
-      const eRise = step(7);
       const eLoop = step(8);
       const sec = time / 1000;
-      pmx = lerp(pmx, mx, 0.05);
-      pmy = lerp(pmy, my, 0.05);
+      pmx = lerp(pmx, mx, 0.04);
+      pmy = lerp(pmy, my, 0.04);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalCompositeOperation = "source-over";
       ctx.clearRect(0, 0, W, H);
-      ctx.globalCompositeOperation = "source-over";
+      ctx.globalCompositeOperation = "lighter";
 
       // ================= Strands (Build, and again in the loop) =================
       const strandAlpha = Math.max(eDraw * (1 - clamp01((s - 2) * 2.2)), eLoop);
@@ -330,21 +370,16 @@ export function AboutFlow() {
         y: lerp(node.y, center.y, pan) + pmy * -8,
       };
       if (nodeAlpha > 0.005) {
-        const pulse = 1 + (reduceMotion ? 0 : Math.sin(sec * 2) * 0.06);
-        const r = 42 * pulse;
-        ctx.globalAlpha = 0.55 * nodeAlpha;
-        ctx.drawImage(sprites[PERI], nodeAt.x - r, nodeAt.y - r, r * 2, r * 2);
-        ctx.globalAlpha = 1;
         ctx.globalCompositeOperation = "source-over";
         ctx.fillStyle = `rgba(${INK}, ${nodeAlpha.toFixed(3)})`;
         ctx.beginPath();
         ctx.roundRect(nodeAt.x - 7, nodeAt.y - 7, 14, 14, 3.5);
         ctx.fill();
-        ctx.globalCompositeOperation = "source-over";
+        ctx.globalCompositeOperation = "lighter";
       }
 
       // ================= Particles (Deliver) =================
-      const partAlpha = clamp01((s - 2) * 4) * (1 - clamp01((s - 6.55) / 0.45));
+      const partAlpha = clamp01((s - 2) * 4) * (1 - eLoop);
       if (partAlpha > 0.005) {
         // Camera: a slow orbit while the field is loose, tilted for the plane, square-on for the grid.
         const loose = 1 - eLanes;
@@ -355,25 +390,36 @@ export function AboutFlow() {
         const cp = Math.cos(pitch);
         const sp = Math.sin(pitch);
         const F = 1000;
+        let lastFill = "";
         for (let i = 0; i < particles.length; i++) {
           const q = particles[i];
+          // Each particle starts every move a touch later than the last, so the field flows.
+          const ps = (k: number, f = inOut) => f(clamp01((s - k) * 1.35 - q.delay * 0.35));
+          const pBurst = outCubic(clamp01((s - 2) * 0.95 - q.delay * 0.45));
+          const pGather = ps(3);
+          const pFlat = ps(4);
+          const pLanes = ps(5);
+          const pLine = ps(6);
+          const pRise = ps(7);
           // Burst out of the college, then gather, flatten, snap to the grid, collapse to a line.
-          const drift = reduceMotion ? 0 : (1 - eGather) * 14;
-          let x = q.sphere.x * eBurst + Math.sin(sec * 0.6 + q.seed) * drift;
-          let y = q.sphere.y * eBurst + Math.cos(sec * 0.5 + q.seed) * drift;
-          let z = q.sphere.z * eBurst;
-          x = lerp(x, q.cluster.x, eGather);
-          y = lerp(y, q.cluster.y, eGather);
-          z = lerp(z, q.cluster.z, eGather);
-          x = lerp(x, q.slab.x, eFlat);
-          y = lerp(y, q.slab.y, eFlat);
-          z = lerp(z, q.slab.z, eFlat);
-          x = lerp(x, q.grid.x, eLanes);
-          y = lerp(y, q.grid.y, eLanes);
-          z = lerp(z, q.grid.z, eLanes);
-          x = lerp(x, q.line.x, eLine);
-          y = lerp(y, q.line.y, eLine);
-          z = lerp(z, q.line.z, eLine);
+          const drift = reduceMotion ? 0 : (1 - pGather) * 12;
+          let x = q.sphere.x * pBurst + Math.sin(sec * 0.45 + q.seed) * drift;
+          let y = q.sphere.y * pBurst + Math.cos(sec * 0.4 + q.seed) * drift;
+          let z = q.sphere.z * pBurst;
+          x = lerp(x, q.cluster.x, pGather);
+          y = lerp(y, q.cluster.y, pGather);
+          z = lerp(z, q.cluster.z, pGather);
+          x = lerp(x, q.slab.x, pFlat);
+          y = lerp(y, q.slab.y, pFlat);
+          z = lerp(z, q.slab.z, pFlat);
+          x = lerp(x, q.grid.x, pLanes);
+          y = lerp(y, q.grid.y, pLanes);
+          z = lerp(z, q.grid.z, pLanes);
+          x = lerp(x, q.line.x, pLine);
+          y = lerp(y, q.line.y, pLine);
+          z = lerp(z, q.line.z, pLine);
+          x = lerp(x, q.chart.x, pRise);
+          y = lerp(y, q.chart.y, pRise);
           // Rotate (yaw, then pitch) and project.
           const x1 = x * cy + z * sy;
           const z1 = -x * sy + z * cy;
@@ -384,74 +430,38 @@ export function AboutFlow() {
           const py = center.y + y2 * k;
           if (px < -60 || px > W + 60 || py < -60 || py > H + 60) continue;
 
-          const color = LANES[q.lane].color;
-          const twinkle = reduceMotion ? 1 : 0.75 + 0.25 * Math.sin(sec * 1.7 + q.seed * 3);
-          const a = partAlpha * q.bright * twinkle;
+          const color = pRise > 0.5 ? q.chartTint : LANES[q.lane].color;
+          // Steadier (less twinkle, brighter) the further right a dot sits in the lanes.
+          const inLanes = pLanes * (1 - pLine);
+          const steady = lerp(1, q.laneT, inLanes);
+          const twinkle = reduceMotion ? 1 : 1 - (0.1 + 0.15 * (1 - steady)) * (1 + Math.sin(sec * 1.3 + q.seed * 3));
+          const shape = lerp(1, 0.4 + 0.6 * q.laneT, inLanes) * lerp(1, q.edge ? 1.15 : 0.22 + 0.6 * q.chartH, pRise);
+          const a = partAlpha * lerp(q.bright, 1, pRise * 0.5) * twinkle * shape;
           // Depth of field: far and near particles grow soft and dim.
-          const blur = clamp01(Math.abs(z2) / 520) * (1 - eLanes);
-          const soft = 1 - eLanes; // glowing sprite while loose, crisp dots in the grid
+          const blur = clamp01(Math.abs(z2) / 520) * (1 - pLanes);
+          const soft = 1 - pLanes; // glowing sprite while loose, crisp dots in the grid
           if (soft > 0.01) {
-            const r = (2.2 + blur * 9) * k;
-            ctx.globalAlpha = a * soft * (1 - blur * 0.6);
+            const r = (2.4 + blur * 6) * k;
+            ctx.globalAlpha = a * soft * (1 - blur * 0.55);
             ctx.drawImage(sprites[color], px - r, py - r, r * 2, r * 2);
           }
-          if (eLanes > 0.01) {
-            ctx.globalAlpha = a * eLanes;
-            ctx.fillStyle = `rgb(${color})`;
+          if (pLanes > 0.01) {
+            if (color !== lastFill) {
+              ctx.fillStyle = `rgb(${color})`;
+              lastFill = color;
+            }
+            ctx.globalAlpha = Math.min(1, a * pLanes);
             ctx.fillRect(px - 1.2, py - 1.2, 2.4, 2.4);
+          }
+          // The chart's top edge glows, tracing the rising curve.
+          if (q.edge && pRise > 0.05) {
+            ctx.globalAlpha = 0.45 * partAlpha * pRise;
+            ctx.drawImage(sprites[q.chartTint], px - 6, py - 6, 12, 12);
           }
         }
         ctx.globalAlpha = 1;
       }
 
-      // ================= Improve: baseline and the rising curve =================
-      const improveAlpha = clamp01((s - 6.35) / 0.5) * (1 - eLoop);
-      const xL = W * 0.12;
-      const xS = W * (narrow ? 0.4 : 0.46);
-      const xE = W * (narrow ? 0.8 : 0.7);
-      const yB = center.y + baseY;
-      const yTop = H * 0.32;
-      if (improveAlpha > 0.005) {
-        ctx.lineCap = "round";
-        ctx.strokeStyle = `rgba(${INK}, ${(0.45 * improveAlpha).toFixed(3)})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(xL, yB);
-        ctx.lineTo(xE, yB);
-        ctx.stroke();
-
-        if (eRise > 0.001) {
-          const pts: Pt[] = [{ x: xS, y: yB }];
-          cubic({ x: xS, y: yB }, { x: lerp(xS, xE, 0.55), y: yB }, { x: lerp(xS, xE, 0.85), y: lerp(yB, yTop, 0.45) }, { x: xE, y: yTop }, 80, pts);
-          const n = Math.max(2, Math.floor(pts.length * eRise));
-          const tip = pts[n - 1];
-          // Warm glow around the tip.
-          const gr = W * 0.17;
-          ctx.globalAlpha = 0.32 * improveAlpha;
-          ctx.drawImage(sprites[AMBER], tip.x - gr, tip.y - gr, gr * 2, gr * 2);
-          ctx.globalAlpha = 1;
-          const grad = ctx.createLinearGradient(xS, yB, xE, yTop);
-          grad.addColorStop(0, `rgba(${PERI}, ${improveAlpha.toFixed(3)})`);
-          grad.addColorStop(0.6, `rgba(${HONEY}, ${improveAlpha.toFixed(3)})`);
-          grad.addColorStop(1, `rgba(${AMBER}, ${improveAlpha.toFixed(3)})`);
-          for (const [w, a] of [
-            [9, 0.12],
-            [4, 0.25],
-            [1.8, 1],
-          ] as const) {
-            ctx.globalAlpha = a;
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = w;
-            ctx.beginPath();
-            ctx.moveTo(pts[0].x, pts[0].y);
-            for (let i = 1; i < n; i++) ctx.lineTo(pts[i].x, pts[i].y);
-            ctx.stroke();
-          }
-          ctx.globalAlpha = improveAlpha;
-          ctx.drawImage(sprites[HONEY], tip.x - 9, tip.y - 9, 18, 18);
-          ctx.globalAlpha = 1;
-        }
-      }
       ctx.globalCompositeOperation = "source-over";
 
       // ================= HTML overlays =================
@@ -473,27 +483,22 @@ export function AboutFlow() {
         nodeLabelRef.current.toggleAttribute("data-better", eLoop > 0.5);
       }
       const win = (a: number, b: number, c: number, d: number) => clamp01((s - a) / (b - a)) * (1 - clamp01((s - c) / (d - c)));
-      const titles = [win(0.1, 0.6, 1.2, 1.6), win(1.6, 2.1, 4.5, 4.9), win(6.4, 6.9, 8.1, 8.4), clamp01((s - 8.4) / 0.5)];
+      const captions = [
+        win(0.1, 0.6, 1.3, 1.7),
+        win(1.7, 2.2, 3.8, 4.2),
+        win(4.2, 4.6, 5.9, 6.3),
+        win(6.3, 6.7, 8.1, 8.4),
+        clamp01((s - 8.4) / 0.5),
+      ];
       titleRefs.current.forEach((el, i) => {
         if (!el) return;
-        el.style.opacity = titles[i].toFixed(3);
-        el.style.transform = `translateY(${((1 - titles[i]) * 14).toFixed(1)}px)`;
+        el.style.opacity = captions[i].toFixed(3);
+        el.style.transform = `translateY(${((1 - captions[i]) * 10).toFixed(1)}px)`;
       });
-      if (legendRef.current) legendRef.current.style.opacity = win(3.2, 3.7, 5.2, 5.5).toFixed(3);
       laneLabelRefs.current.forEach((el, k) => {
         if (!el) return;
         el.style.transform = `translate(${(W * (narrow ? 0.05 : 0.08)).toFixed(1)}px, ${(center.y + laneY[k] - 9).toFixed(1)}px)`;
         el.style.opacity = (eLanes * (1 - eLine)).toFixed(3);
-      });
-      improveLabelRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const pos = [
-          [xL, yB - 28],
-          [lerp(xS, xE, 0.45), yB + 12],
-          [xE + 16, yTop - 10],
-        ][i];
-        el.style.transform = `translate(${pos[0].toFixed(1)}px, ${pos[1].toFixed(1)}px)`;
-        el.style.opacity = (i === 2 ? improveAlpha * eRise : improveAlpha).toFixed(3);
       });
       const phase = s < 1.6 || s > 8.6 ? 0 : s < 6.4 ? 1 : 2;
       tabRefs.current.forEach((el, i) => el?.toggleAttribute("data-active", i === phase));
@@ -508,9 +513,12 @@ export function AboutFlow() {
       const diff = target - s;
       if (reduceMotion) s = target;
       else if (diff !== 0) {
-        // Catch up faster when several steps behind.
-        const speed = (1 / STEP_SECONDS) * (1 + Math.max(0, Math.abs(diff) - 1) * 0.9);
-        s += Math.sign(diff) * Math.min(Math.abs(diff), speed * dt);
+        // Critically damped approach: quick to start, soft to settle, never overshoots.
+        // Capped so a big scroll jump still plays through each step.
+        const v = diff * (1 - Math.exp(-dt * 2.4));
+        const cap = dt * 2.2;
+        s += Math.max(-cap, Math.min(cap, v));
+        if (Math.abs(target - s) < 0.0005) s = target;
       }
       draw(time);
       raf = visible ? requestAnimationFrame(frame) : 0;
@@ -551,29 +559,22 @@ export function AboutFlow() {
   };
 
   return (
-    <section id="about" className="about-light scroll-mt-16">
+    <section id="mission" aria-label="Our mission" className="mission-dark scroll-mt-16">
       <div ref={trackRef} className="about-flow relative">
         <div ref={stageRef} className="about-flow__stage sticky top-16 overflow-hidden">
           <canvas ref={canvasRef} className="absolute inset-0" aria-hidden="true" />
-          <div aria-hidden="true" className={`${container} pointer-events-none absolute inset-x-0 inset-y-0 border-x border-line`} />
 
           <div className="about-flow__titles">
-            {[
-              ["Build.", "TechCity brings the knowledge, training and guidance."],
-              ["Deliver.", "Inside your college: trainers, labs and faculty sessions, in your timetable."],
-              ["Improve.", "Every batch leaves more job-ready than the last."],
-              ["What students learn becomes part of your college.", "The next batch begins."],
-            ].map(([t, sub], i) => (
-              <div
-                key={t}
+            {CAPTIONS.map((line, i) => (
+              <p
+                key={line}
                 ref={(el) => {
                   titleRefs.current[i] = el;
                 }}
-                className="about-flow__title"
+                className="about-flow__caption"
               >
-                <h2>{t}</h2>
-                <p>{sub}</p>
-              </div>
+                {line}
+              </p>
             ))}
           </div>
 
@@ -592,14 +593,6 @@ export function AboutFlow() {
             <span className="about-flow__node-a">Your college</span>
             <span className="about-flow__node-b">Your college, but better</span>
           </div>
-          <div ref={legendRef} className="about-flow__legend" aria-hidden="true">
-            {LANES.map((l) => (
-              <span key={l.label}>
-                <i style={{ background: `rgb(${l.color})` }} />
-                {l.label}
-              </span>
-            ))}
-          </div>
           {LANES.map((l, k) => (
             <span
               key={l.label}
@@ -611,18 +604,6 @@ export function AboutFlow() {
               {l.label}
             </span>
           ))}
-          {["Placement readiness", "Before TechCity", "With TechCity"].map((l, i) => (
-            <span
-              key={l}
-              ref={(el) => {
-                improveLabelRefs.current[i] = el;
-              }}
-              className={`about-flow__tag ${i === 2 ? "about-flow__tag--strong" : ""}`}
-            >
-              {l}
-            </span>
-          ))}
-
           <nav className="about-flow__pill" aria-label="About TechCity">
             <div className="about-flow__tabs">
               {PHASES.map((ph, i) => (
@@ -638,10 +619,6 @@ export function AboutFlow() {
                 </button>
               ))}
             </div>
-            <Link href="/company/story" className="about-flow__cta">
-              <span className="about-flow__cta-dash" aria-hidden="true" />
-              Our story <span aria-hidden="true">↗</span>
-            </Link>
           </nav>
         </div>
       </div>

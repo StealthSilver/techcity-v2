@@ -1798,13 +1798,13 @@ a:focus-visible > .product-tile {
 }
 
 /* ---------------------------------------------------------------
-   About flow (src/components/about-flow.tsx): Build → Deliver → Improve.
-   Light stage inside the page guide lines, pinned under the navbar
-   for 9 steps x 70vh of scroll.
+   Our mission (src/components/about-flow.tsx): Build → Deliver → Improve.
+   Brand-navy stage (the footer's #1C257D), pinned under the navbar for 9 steps x 70vh of scroll.
    --------------------------------------------------------------- */
-.about-light {
-  background: var(--bg);
-  color: var(--text);
+.mission-dark {
+  --mi-bg: var(--accent); /* #1C257D, same navy as the footer */
+  background: var(--mi-bg);
+  color: #fff;
 }
 .about-flow {
   height: calc(max(calc(100svh - 64px), 640px) + 630vh);
@@ -1812,44 +1812,33 @@ a:focus-visible > .product-tile {
 .about-flow__stage {
   height: max(calc(100svh - 64px), 640px);
   background:
-    radial-gradient(60% 55% at 50% 55%, color-mix(in srgb, var(--g-mist) 70%, transparent), transparent 70%),
-    var(--bg);
+    radial-gradient(55% 50% at 50% 58%, rgb(107 123 230 / 0.22), transparent 70%),
+    radial-gradient(40% 35% at 70% 80%, rgb(245 158 11 / 0.06), transparent 70%),
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgb(11 18 81 / 0.45)),
+    var(--mi-bg);
 }
 .about-flow__titles {
   position: absolute;
-  top: 10%;
+  top: 9%;
   left: 0;
   right: 0;
   display: grid;
   pointer-events: none;
   z-index: 2;
 }
-.about-flow__title {
+.about-flow__caption {
   grid-area: 1 / 1;
   margin: 0 auto;
-  max-width: 780px;
+  max-width: 820px;
   padding: 0 24px;
   text-align: center;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: rgb(255 255 255 / 0.92);
   opacity: 0;
   will-change: opacity, transform;
-}
-.about-flow__title h2 {
-  font-size: clamp(34px, 4.4vw, 60px);
-  line-height: 1.08;
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-.about-flow__title:last-child h2 {
-  font-size: clamp(26px, 3vw, 40px);
-  letter-spacing: -0.02em;
-}
-.about-flow__title p {
-  margin: 14px auto 0;
-  max-width: 440px;
-  font-size: 17px;
-  line-height: 1.55;
-  color: var(--text-muted);
 }
 .about-flow__tag {
   position: absolute;
@@ -1857,7 +1846,7 @@ a:focus-visible > .product-tile {
   left: 0;
   z-index: 2;
   font-size: 14px;
-  color: var(--text-muted);
+  color: rgb(228 232 253 / 0.62);
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -1865,7 +1854,7 @@ a:focus-visible > .product-tile {
 }
 .about-flow__tag--strong {
   font-weight: 500;
-  color: var(--text);
+  color: #FCD38A;
 }
 .about-flow__node {
   position: absolute;
@@ -1875,7 +1864,7 @@ a:focus-visible > .product-tile {
   display: grid;
   font-size: 17px;
   font-weight: 500;
-  color: var(--text);
+  color: rgb(255 255 255 / 0.92);
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -1892,34 +1881,8 @@ a:focus-visible > .product-tile {
 .about-flow__node[data-better] .about-flow__node-b {
   opacity: 1;
 }
-.about-flow__legend {
-  position: absolute;
-  top: 7%;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 22px;
-  padding: 0 24px;
-  font-size: 14px;
-  color: var(--text-muted);
-  opacity: 0;
-  pointer-events: none;
-}
-.about-flow__legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.about-flow__legend i {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-}
 
-/* Bottom phase switcher: a light segmented pill in the site's button style. */
+/* Bottom phase switcher: a glassy segmented pill on the navy stage. */
 .about-flow__pill {
   position: absolute;
   bottom: 26px;
@@ -1927,60 +1890,41 @@ a:focus-visible > .product-tile {
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px;
+  padding: 4px;
   translate: -50% 0;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: rgb(255 255 255 / 0.05);
   box-shadow:
-    0 0 0 1px var(--line),
-    0 20px 40px -20px color-mix(in srgb, var(--accent) 25%, transparent);
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    0 20px 40px -20px rgb(0 0 0 / 0.6);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 .about-flow__tabs {
   display: flex;
   gap: 2px;
-  padding: 3px;
-  border-radius: 7px;
-  background: var(--surface-subdued);
-  box-shadow: inset 0 0 0 1px var(--line);
 }
-.about-flow__tabs button,
-.about-flow__cta {
+.about-flow__tabs button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: 5px;
+  padding: 7px 16px;
+  border-radius: 7px;
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-muted);
+  color: rgb(228 232 253 / 0.55);
   transition:
     background-color 300ms var(--ease-in-out),
     color 300ms var(--ease-in-out),
     box-shadow 300ms var(--ease-in-out);
 }
 .about-flow__tabs button:hover {
-  color: var(--text);
+  color: rgb(255 255 255 / 0.85);
 }
 .about-flow__tabs button[data-active] {
-  color: var(--text);
-  background: var(--bg);
-  box-shadow: var(--shadow-btn);
-}
-.about-flow__cta {
-  color: var(--accent);
-}
-.about-flow__cta:hover {
-  color: var(--accent-hover);
-  background: var(--surface-subdued);
-}
-.about-flow__cta-dash {
-  width: 10px;
-  height: 1.5px;
-  background: var(--highlight);
+  color: #fff;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
 }
 
 /* ---------------------------------------------------------------

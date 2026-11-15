@@ -161,7 +161,7 @@ function DesktopScroll() {
   return (
     <div ref={trackRef} className="pscroll relative hidden lg:block">
       <div ref={stageRef} className="pscroll__stage sticky top-16">
-        <div className={`${container} relative grid h-full grid-cols-2 border-x border-line`}>
+        <div className={`${container} relative grid h-full grid-cols-2 border-line`}>
           {/* Left: intro, labels on the border line, headline and blurb. */}
           <div className="relative h-full">
             <span ref={lineRef} className="pscroll__progress" aria-hidden="true" />
@@ -223,7 +223,7 @@ function MobileList() {
   const goTo = (i: number) =>
     document.getElementById(`product-${products[i].id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
-    <div className={`${container} border-x border-line px-5 py-16 sm:px-10 lg:hidden`}>
+    <div className={`${container} border-line px-5 py-16 sm:px-10 lg:hidden`}>
       <h2 className="pscroll__intro">
         The TechCity stack: five tools, one account, <em>first lesson to first offer</em>.
       </h2>

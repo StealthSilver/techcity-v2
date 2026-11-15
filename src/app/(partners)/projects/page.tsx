@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Projects" };
 export default function Page() {
   return (
     <PageShell title="Projects">
-      <div className={`${container} grid gap-12 border-x border-b border-line px-5 py-12 sm:px-10 sm:py-16 lg:grid-cols-3 lg:px-[120px] lg:py-20`}>
+      <div className={`${container} grid gap-12 border-b border-line px-5 py-12 sm:px-10 sm:py-16 lg:grid-cols-3 lg:px-[120px] lg:py-20`}>
         {projectStatuses.map((s) => {
           const list = projects.filter((p) => p.status === s.id);
           return (
