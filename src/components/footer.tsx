@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CurrentYear } from "@/components/current-year";
-import { HoverArrow } from "@/components/hover-arrow";
+import { ExternalArrow, HoverArrow, newTab } from "@/components/hover-arrow";
+import { products } from "@/lib/products";
 import { Logo } from "@/components/logo";
 import { container } from "@/lib/layout";
 import { site } from "@/lib/site";
 
-type FooterLink = { label: string; href: string };
+type FooterLink = { label: string; href: string; external?: boolean };
 type FooterGroup = { title: string; links: FooterLink[] };
 
 /** Each column holds one or more stacked groups (like "Marketplace" + "Business"). */
@@ -15,11 +16,7 @@ const columns: FooterGroup[][] = [
     {
       title: "Products",
       links: [
-        { label: "Spardha", href: "/products/spardha" },
-        { label: "Marg", href: "/products/marg" },
-        { label: "Setu", href: "/products/setu" },
-        { label: "Riyaaz", href: "/products/riyaaz" },
-        { label: "Kaksha", href: "/products/kaksha" },
+        ...products.map((p) => ({ label: p.name, href: p.href, external: true })),
         { label: "Product roadmap", href: "/company/roadmap" },
       ],
     },
@@ -231,9 +228,16 @@ export function Footer({ audience = "partners" }: { audience?: Audience }) {
                     <ul className="mt-4 flex flex-col gap-2.5">
                       {group.links.map((link) => (
                         <li key={link.label}>
-                          <Link href={link.href} className={linkClass}>
-                            {link.label}
-                          </Link>
+                          {link.external ? (
+                            <a href={link.href} className={`${linkClass} inline-flex items-center`} {...newTab}>
+                              {link.label}
+                              <ExternalArrow />
+                            </a>
+                          ) : (
+                            <Link href={link.href} className={linkClass}>
+                              {link.label}
+                            </Link>
+                          )}
                         </li>
                       ))}
                     </ul>

@@ -13,8 +13,12 @@ export type Product = {
   description: string;
   features: string[];
   status: "Live" | "Coming soon";
+  /** The product's own site (external, opens in a new tab). */
   href: string;
 };
+
+/** Each product lives on its own subdomain, outside this site. */
+export const productUrl = (id: ProductId) => `https://${id}.techcityskills.com`;
 
 /** Order matters: this is the order the products scroll through on the home page. */
 export const products: Product[] = [
@@ -29,7 +33,7 @@ export const products: Product[] = [
       "Courses, assignments, attendance and progress in one place, so faculty can run every cohort and students always know what’s next.",
     features: ["Courses and assignments", "Attendance and grading", "Progress for every batch"],
     status: "Coming soon",
-    href: "/products/setu",
+    href: productUrl("setu"),
   },
   {
     id: "marg",
@@ -42,7 +46,7 @@ export const products: Product[] = [
       "Guided roadmaps for DSA, AI/ML and cloud that turn big goals into small steps, and show students what to learn next and how far they’ve come.",
     features: ["DSA, AI/ML and cloud tracks", "Milestones with curated resources", "Progress students can see"],
     status: "Live",
-    href: "/products/marg",
+    href: productUrl("marg"),
   },
   {
     id: "spardha",
@@ -55,7 +59,7 @@ export const products: Product[] = [
       "Timed assessments and coding contests with instant scoring and live leaderboards, so faculty see where every student stands.",
     features: ["Timed tests and assessments", "Campus-wide coding contests", "Instant results and leaderboards"],
     status: "Live",
-    href: "/products/spardha",
+    href: productUrl("spardha"),
   },
   {
     id: "riyaaz",
@@ -68,7 +72,7 @@ export const products: Product[] = [
       "A few LeetCode-style problems every day, instant feedback on every run, and streaks that keep students coming back.",
     features: ["Daily problem sets", "Instant test feedback", "Streaks and progress"],
     status: "Coming soon",
-    href: "/products/riyaaz",
+    href: productUrl("riyaaz"),
   },
   {
     id: "kaksha",
@@ -81,6 +85,6 @@ export const products: Product[] = [
       "Cohort-based video courses paired with hands-on labs, so students learn alongside their batch and finish every chapter with work they built.",
     features: ["Video chapters with labs", "Live cohorts", "Work to show at the end"],
     status: "Coming soon",
-    href: "/products/kaksha",
+    href: productUrl("kaksha"),
   },
 ];

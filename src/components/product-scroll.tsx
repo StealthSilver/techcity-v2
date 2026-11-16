@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ExternalArrow, newTab } from "@/components/hover-arrow";
 import { TechStack } from "@/components/tech-stack";
 import { container } from "@/lib/layout";
 import { products } from "@/lib/products";
@@ -200,10 +200,10 @@ function DesktopScroll() {
               >
                 <h3 className="pscroll__headline">{p.headline}</h3>
                 <p className="pscroll__blurb">{p.blurb}</p>
-                <Link href={p.href} className="pscroll__more">
+                <a href={p.href} {...newTab} className="pscroll__more btn btn-secondary btn-lg shadow-[var(--shadow-btn)]">
                   Explore {p.name}
-                  <span aria-hidden="true">→</span>
-                </Link>
+                  <ExternalArrow />
+                </a>
               </div>
             ))}
           </div>
@@ -240,10 +240,10 @@ function MobileList() {
             </p>
             <h3 className="pscroll__headline mt-4">{p.headline}</h3>
             <p className="pscroll__blurb">{p.blurb}</p>
-            <Link href={p.href} className="pscroll__more">
+            <a href={p.href} {...newTab} className="pscroll__more btn btn-secondary btn-lg shadow-[var(--shadow-btn)]">
               Explore {p.name}
-              <span aria-hidden="true">→</span>
-            </Link>
+              <ExternalArrow />
+            </a>
           </article>
         ))}
       </div>

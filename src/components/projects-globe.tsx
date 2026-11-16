@@ -191,6 +191,8 @@ export function ProjectsGlobe() {
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
+      // A collapsed layout (hidden tab, zero-size wrap) leaves the shell empty; drawing it would throw.
+      if (shell.width === 0 || shell.height === 0) return;
       ctx.drawImage(shell, 0, 0, W, H);
       drawDots();
 

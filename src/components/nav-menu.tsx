@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { HoverArrow } from "@/components/hover-arrow";
+import { ExternalArrow, HoverArrow, newTab } from "@/components/hover-arrow";
 import { Icon } from "@/components/icons";
 import { ProductLogo } from "@/components/product-logo";
 import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
@@ -210,8 +210,14 @@ function Section({ section, divided, onNavigate }: { section: NavSection; divide
 }
 
 function MenuLink({ item, onNavigate }: { item: NavItem; onNavigate: () => void }) {
+  const Tag = item.external ? "a" : Link;
   return (
-    <Link href={item.href} onClick={onNavigate} className="nav-link flex w-full items-center gap-3">
+    <Tag
+      href={item.href}
+      onClick={onNavigate}
+      className="nav-link flex w-full items-center gap-3"
+      {...(item.external ? newTab : {})}
+    >
       {item.product ? (
         <ProductLogo id={item.product} size={34} />
       ) : item.icon ? (
@@ -222,7 +228,7 @@ function MenuLink({ item, onNavigate }: { item: NavItem; onNavigate: () => void 
       <span className="min-w-0 flex-1">
         <span className="flex items-center text-[14px] leading-5 font-medium text-text">
           {item.label}
-          <HoverArrow reveal />
+          {item.external ? <ExternalArrow /> : <HoverArrow reveal />}
         </span>
         {item.description && (
           <span className={`nav-link__desc block text-[14px] leading-5 ${item.nowrapDescription ? "whitespace-nowrap" : ""}`}>
@@ -230,6 +236,6 @@ function MenuLink({ item, onNavigate }: { item: NavItem; onNavigate: () => void 
           </span>
         )}
       </span>
-    </Link>
+    </Tag>
   );
 }

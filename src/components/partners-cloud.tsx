@@ -115,7 +115,7 @@ export function PartnersCloud() {
               <th scope="col" className="max-sm:hidden">
                 {tab.detail}
               </th>
-              <th scope="col" className="w-[1%] whitespace-nowrap">
+              <th scope="col" className="w-[1%] whitespace-nowrap max-sm:hidden">
                 Type
               </th>
             </tr>
@@ -131,11 +131,16 @@ export function PartnersCloud() {
                     <div className="min-w-0">
                       <p className="text-[15px] leading-[1.4] font-medium text-text">{r.name}</p>
                       <p className="mt-0.5 text-[13px] leading-[1.5] text-text-muted sm:hidden">{r.detail}</p>
+                      {/* Phones: the Type column folds in under the name. */}
+                      <p className="mt-1 flex items-center gap-1.5 text-[12px] leading-[1.5] text-text-muted sm:hidden">
+                        <i className="h-1.5 w-1.5 rounded-full" style={{ background: r.kind.color }} aria-hidden="true" />
+                        {r.kind.label}
+                      </p>
                     </div>
                   </div>
                 </td>
                 <td className="text-[14px] leading-[1.5] text-text-muted max-sm:hidden">{r.detail}</td>
-                <td className="whitespace-nowrap">
+                <td className="whitespace-nowrap max-sm:hidden">
                   <span className="flex items-center gap-2 text-[14px] leading-[1.5] text-text-muted">
                     <i className="h-1.5 w-1.5 rounded-full" style={{ background: r.kind.color }} aria-hidden="true" />
                     {r.kind.label}

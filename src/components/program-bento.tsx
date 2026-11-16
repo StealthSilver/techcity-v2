@@ -1,5 +1,13 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import type { ComponentType, CSSProperties } from "react";
+import { ContentItem } from "@/components/bento/content";
+import { FacultyItem } from "@/components/bento/faculty";
+import { MentorshipItem } from "@/components/bento/mentorship";
+import { OnlineItem } from "@/components/bento/online";
+import { PlacementItem } from "@/components/bento/placement";
+import { PlacingItem } from "@/components/bento/placing";
+import { PlatformsItem } from "@/components/bento/platforms";
+import { TrainersItem } from "@/components/bento/trainers";
 import { programBento, type BentoSize } from "@/lib/programs";
 
 /**
@@ -11,10 +19,11 @@ import { programBento, type BentoSize } from "@/lib/programs";
  *   1. a soft mesh of drifting colour glows (CSS radial gradients), and
  *   2. one or two folded ribbons (SVG) that sway slowly, most with hairlines.
  * Only the brand ramp is used (navy → periwinkle → mist → cream → amber).
- * The `.bento-ill` slot in each card is where the program illustration goes.
+ * Over the scene, each card's `.bento-ill` slot holds its program item: a small
+ * animated piece of product UI in gentle 3D (src/components/bento).
  */
 
-const C = {
+export const C = {
   navy: "#1C257D",
   indigo: "#3B47C4",
   periwinkle: "#6B7BE6",
@@ -42,7 +51,7 @@ type Ribbon = {
   lines?: boolean;
   opacity?: number;
 };
-type Scene = { blobs: Blob[]; ribbons: Ribbon[] };
+export type Scene = { blobs: Blob[]; ribbons: Ribbon[] };
 
 const scenes: Record<string, Scene> = {
   // Warm amber sweep from the top-right over a lavender base (like Stripe's lead card).
@@ -144,7 +153,7 @@ function ribbonShape(r: Ribbon) {
   return `${ribbonEdge(r)} L420 ${r.y1 + r.t1} C270 ${r.y1 - r.bend + mid * 1.2} 130 ${r.y0 + r.bend + mid * 0.8} -20 ${r.y0 + r.t0} Z`;
 }
 
-function SceneArt({ id, scene }: { id: string; scene: Scene }) {
+export function SceneArt({ id, scene }: { id: string; scene: Scene }) {
   return (
     <div className="bento-bg" aria-hidden="true">
       {scene.blobs.map((b, i) => (
@@ -189,6 +198,17 @@ function ExpandIcon() {
   );
 }
 
+const items: Record<string, ComponentType> = {
+  trainers: TrainersItem,
+  placement: PlacementItem,
+  placing: PlacingItem,
+  mentorship: MentorshipItem,
+  faculty: FacultyItem,
+  online: OnlineItem,
+  content: ContentItem,
+  platforms: PlatformsItem,
+};
+
 const sizeClass: Record<BentoSize, string> = {
   wide: "md:col-span-2",
   tall: "md:row-span-2",
@@ -198,21 +218,25 @@ const sizeClass: Record<BentoSize, string> = {
 export function ProgramBento() {
   return (
     <div className="bento-grid grid grid-flow-dense grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {programBento.map((p) => (
-        <Link key={p.anchor} href={`/programs#${p.anchor}`} className={`bento-card group ${sizeClass[p.size]}`}>
-          <SceneArt id={p.anchor} scene={scenes[p.anchor]} />
-          <div className="relative z-[1] flex items-start justify-between gap-6 p-6 lg:p-7">
-            <h3 className="max-w-[24ch] text-[18px] leading-[1.3] font-normal tracking-[-0.02em] text-text lg:text-[20px]">
-              {p.title}
-            </h3>
-            <span className="bento-expand" aria-hidden="true">
-              <ExpandIcon />
-            </span>
-          </div>
-          {/* Illustration slot (to be built per program). */}
-          <div className="bento-ill" data-program={p.anchor} />
-        </Link>
-      ))}
+      {programBento.map((p) => {
+        const Item = items[p.anchor];
+        return (
+          <Link key={p.anchor} href={`/programs#${p.anchor}`} className={`bento-card group ${sizeClass[p.size]}`}>
+            <SceneArt id={p.anchor} scene={scenes[p.anchor]} />
+            <div className="relative z-[1] flex items-start justify-between gap-6 p-6 lg:p-7">
+              <h3 className="max-w-[24ch] text-[18px] leading-[1.3] font-normal tracking-[-0.02em] text-text lg:text-[20px]">
+                {p.title}
+              </h3>
+              <span className="bento-expand" aria-hidden="true">
+                <ExpandIcon />
+              </span>
+            </div>
+            <div className="bento-ill" data-program={p.anchor}>
+              {Item && <Item />}
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }

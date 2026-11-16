@@ -1,5 +1,6 @@
 import type { IconName } from "@/components/icons";
 import type { ProductId } from "@/components/product-logo";
+import { productUrl } from "@/lib/products";
 
 export type NavItem = {
   label: string;
@@ -9,6 +10,8 @@ export type NavItem = {
   nowrapDescription?: boolean;
   icon?: IconName;
   product?: ProductId;
+  /** Off-site link (the product sites): opens in a new tab, with a ↗ arrow. */
+  external?: boolean;
 };
 
 /** One column of links inside a dropdown. */
@@ -47,17 +50,17 @@ const productSections: NavSection[] = [
     title: "Live now",
     accent: true,
     items: [
-      { label: "Spardha", product: "spardha", description: "Tests and campus contests", href: "/products/spardha" },
-      { label: "Marg", product: "marg", description: "Learning paths and roadmaps", nowrapDescription: true, href: "/products/marg" },
+      { label: "Spardha", product: "spardha", description: "Tests and campus contests", href: productUrl("spardha"), external: true },
+      { label: "Marg", product: "marg", description: "Learning paths and roadmaps", nowrapDescription: true, href: productUrl("marg"), external: true },
     ],
   },
   {
     title: "Coming soon",
     accent: true,
     items: [
-      { label: "Setu", product: "setu", description: "Learning management", href: "/products/setu" },
-      { label: "Riyaaz", product: "riyaaz", description: "Daily coding practice", href: "/products/riyaaz" },
-      { label: "Kaksha", product: "kaksha", description: "Cohort-based video courses", nowrapDescription: true, href: "/products/kaksha" },
+      { label: "Setu", product: "setu", description: "Learning management", href: productUrl("setu"), external: true },
+      { label: "Riyaaz", product: "riyaaz", description: "Daily coding practice", href: productUrl("riyaaz"), external: true },
+      { label: "Kaksha", product: "kaksha", description: "Cohort-based video courses", nowrapDescription: true, href: productUrl("kaksha"), external: true },
     ],
   },
 ];
