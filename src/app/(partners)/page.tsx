@@ -118,7 +118,7 @@ export default function Home() {
       <ProductScroll />
 
       <section id="programs" className="programs-section scroll-mt-20">
-        <div className={`${container} border-b border-line px-5 py-16 sm:px-10 sm:py-20 lg:py-24`}>
+        <div className={`${container} border-x border-b border-line px-5 py-16 sm:px-10 sm:py-20 lg:py-24`}>
           <h2 className="max-w-[860px] text-[clamp(24px,2.6vw,32px)] leading-[1.25] font-normal tracking-[-0.02em] text-text">
             Programs for every step from classroom to career.{" "}
             <span className="text-text-muted">
@@ -133,7 +133,7 @@ export default function Home() {
       </section>
 
       <section id="projects" className="projects-section scroll-mt-20">
-        <div className={`${container} flex flex-col border-b border-line md:h-[min(84svh,760px)] md:min-h-[600px]`}>
+        <div className={`${container} flex flex-col border-x border-b border-line md:h-[min(84svh,760px)] md:min-h-[600px]`}>
           <div className="flex flex-col gap-6 px-5 pt-12 pb-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-14 sm:pb-10">
             <h2 className="max-w-[760px] text-[clamp(24px,2.4vw,32px)] leading-[1.2] font-normal tracking-[-0.02em] text-text">
               Learning in action on campuses across India.
@@ -148,10 +148,13 @@ export default function Home() {
       </section>
 
       <section id="partners" className="scroll-mt-20">
-        <div className={`${container} border-b border-line`}>
+        <div className={`${container} border-x border-b border-line`}>
           <div className="flex flex-col gap-6 px-5 pt-12 pb-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-14 sm:pb-10">
-            <h2 className="max-w-[760px] text-[clamp(24px,2.4vw,32px)] leading-[1.2] font-normal tracking-[-0.02em] text-text">
-              Trusted by colleges and industry teams.
+            <h2 className="max-w-[760px] text-[clamp(24px,2.6vw,32px)] leading-[1.25] font-normal tracking-[-0.02em] text-text">
+              Trusted by colleges and industry teams.{" "}
+              <span className="text-text-muted">
+                Universities and institutes across north India, and the companies that shape what we teach.
+              </span>
             </h2>
             <Link href="/company/testimonials" className="btn btn-secondary btn-lg shrink-0 self-start shadow-[var(--shadow-btn)] sm:self-auto">
               See stories
@@ -163,7 +166,7 @@ export default function Home() {
       </section>
 
       <section id="testimonials" className="scroll-mt-20">
-        <div className={`${container} border-b border-line px-5 py-16 sm:px-10 sm:py-20 lg:px-[48px] lg:py-24`}>
+        <div className={`${container} border-x border-b border-line px-5 py-14 sm:px-10 sm:py-16 lg:py-20`}>
           <TestimonialsCarousel />
         </div>
       </section>

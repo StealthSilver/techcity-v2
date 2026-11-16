@@ -4,94 +4,76 @@
 import { useState } from "react";
 
 /**
- * Partners: two logo clouds (colleges and industry) behind the same tab band
- * as the Projects section. Logos sit in a calm grid with plenty of air, in
- * full colour, modelled on the "used by" cloud on pikaicons.com.
+ * Partners: the same tab band as the Projects section over a plain table of
+ * partners (logo and name, location or focus, type), ruled with the page's
+ * guide lines.
  *
- * College logos are the pre-trimmed copies in public/logos/ticker.
- * Industry entries are illustrative sector marks until real partner logos
- * are confirmed; swap each for `{ name, src }` once they're in public/logos.
+ * College logos are the pre-trimmed copies in public/logos/ticker;
+ * industry logos are in public/partners (froyo-mark.png is the Froyo mark
+ * cropped from its white-on-dark wordmark so it reads on a white tile).
  */
 
-/** `size` evens out optical weight: square marks need more height than wide wordmarks. */
-type CollegeLogo = { name: string; src: string; size?: number };
-type IndustryMark = { name: string; mark: "spark" | "grid" | "orbit" | "wave" | "nodes" | "frame"; color: string };
+type Kind = { label: string; color: string };
 
-const colleges: CollegeLogo[] = [
-  { name: "Ajay Kumar Garg Engineering College", src: "/logos/ticker/akgec.webp", size: 64 },
-  { name: "KIET University", src: "/logos/ticker/kiet.webp" },
-  { name: "Echelon Institute of Technology", src: "/logos/ticker/echelon.webp" },
-  { name: "Chitkara University", src: "/logos/ticker/chitkara.webp" },
-  { name: "Inmantec Institutions", src: "/logos/ticker/inmantec.webp" },
-  { name: "KCNIT Group of Institutions", src: "/logos/ticker/kcnit.webp" },
-  { name: "St. Andrews Institute of Technology and Management", src: "/logos/ticker/st-andrews.webp", size: 60 },
-  { name: "Chandigarh University", src: "/logos/ticker/chandigarh.webp" },
-  { name: "Shobhit University", src: "/logos/ticker/shobhit.webp" },
-  { name: "Jai Prakash Vishwavidyalaya", src: "/logos/ticker/jpu-chapra.webp", size: 64 },
-  { name: "Adhunik Group of Institutions", src: "/logos/ticker/adhunik.webp" },
-  { name: "School of Management Sciences, Lucknow", src: "/logos/ticker/sms-lucknow.webp" },
-  { name: "Lovely Professional University", src: "/logos/ticker/lpu.webp" },
+const KIND = {
+  university: { label: "University", color: "#1C257D" },
+  institute: { label: "Institute", color: "#6B7BE6" },
+  technology: { label: "Technology", color: "#F59E0B" },
+  training: { label: "Training", color: "#3B47C4" },
+} satisfies Record<string, Kind>;
+
+type Row = { name: string; src: string; detail: string; kind: Kind };
+
+const colleges: Row[] = [
+  { name: "Ajay Kumar Garg Engineering College", src: "/logos/ticker/akgec.webp", detail: "Ghaziabad, Uttar Pradesh", kind: KIND.institute },
+  { name: "KIET University", src: "/logos/ticker/kiet.webp", detail: "Ghaziabad, Uttar Pradesh", kind: KIND.university },
+  { name: "Echelon Institute of Technology", src: "/logos/ticker/echelon.webp", detail: "Faridabad, Haryana", kind: KIND.institute },
+  { name: "Chitkara University", src: "/logos/ticker/chitkara.webp", detail: "Rajpura, Punjab", kind: KIND.university },
+  { name: "Inmantec Institutions", src: "/logos/ticker/inmantec.webp", detail: "Ghaziabad, Uttar Pradesh", kind: KIND.institute },
+  { name: "KCNIT Group of Institutions", src: "/logos/ticker/kcnit.webp", detail: "Banda, Uttar Pradesh", kind: KIND.institute },
+  {
+    name: "St. Andrews Institute of Technology and Management",
+    src: "/logos/ticker/st-andrews.webp",
+    detail: "Gurugram, Haryana",
+    kind: KIND.institute,
+  },
+  { name: "Chandigarh University", src: "/logos/ticker/chandigarh.webp", detail: "Mohali, Punjab", kind: KIND.university },
+  { name: "Shobhit University", src: "/logos/ticker/shobhit.webp", detail: "Meerut, Uttar Pradesh", kind: KIND.university },
+  { name: "Jai Prakash Vishwavidyalaya", src: "/logos/ticker/jpu-chapra.webp", detail: "Chapra, Bihar", kind: KIND.university },
+  { name: "Adhunik Group of Institutions", src: "/logos/ticker/adhunik.webp", detail: "Ghaziabad, Uttar Pradesh", kind: KIND.institute },
+  { name: "School of Management Sciences", src: "/logos/ticker/sms-lucknow.webp", detail: "Lucknow, Uttar Pradesh", kind: KIND.institute },
+  { name: "Lovely Professional University", src: "/logos/ticker/lpu.webp", detail: "Phagwara, Punjab", kind: KIND.university },
 ];
 
-const industry: IndustryMark[] = [
-  { name: "AI & Data", mark: "spark", color: "#3B47C4" },
-  { name: "Cloud Systems", mark: "grid", color: "#1C257D" },
-  { name: "Digital Products", mark: "orbit", color: "#6B7BE6" },
-  { name: "Fintech", mark: "wave", color: "#F59E0B" },
-  { name: "Engineering", mark: "nodes", color: "#3B47C4" },
-  { name: "Emerging Tech", mark: "frame", color: "#1C257D" },
+const industry: Row[] = [
+  { name: "HCL GUVI", src: "/partners/hcl-guvi.webp", detail: "Tech upskilling and certification", kind: KIND.training },
+  { name: "Chetu", src: "/partners/chetu.png", detail: "AI and digital transformation", kind: KIND.technology },
+  { name: "Hitbullseye", src: "/partners/hitbullseye.png", detail: "Aptitude and placement preparation", kind: KIND.training },
+  { name: "VTS Infosoft", src: "/partners/vts-infosoft.png", detail: "Digital transformation", kind: KIND.technology },
+  { name: "Victory Tech Solutions", src: "/partners/victory.png", detail: "Technology solutions", kind: KIND.technology },
+  { name: "epiTech Infosystems", src: "/partners/epitech.png", detail: "IT services", kind: KIND.technology },
+  { name: "Froyo Technologies", src: "/partners/froyo-mark.png", detail: "Technology services", kind: KIND.technology },
+  { name: "Hadwik Data Solutions", src: "/partners/hadwick.jpeg", detail: "IT training and placement", kind: KIND.training },
+  { name: "Edcept", src: "/partners/edcept.svg", detail: "Education services", kind: KIND.training },
+  { name: "My Edu Galaxy", src: "/partners/my-edu-galaxy.svg", detail: "Education services", kind: KIND.training },
 ];
 
 const tabs = [
-  { id: "colleges", label: "College partners", count: colleges.length, color: "#1C257D" },
-  { id: "industry", label: "Industry partners", count: industry.length, color: "#F59E0B" },
+  { id: "colleges", label: "College partners", rows: colleges, detail: "Location", color: "#1C257D" },
+  { id: "industry", label: "Industry partners", rows: industry, detail: "Focus", color: "#F59E0B" },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
 
-function SectorMark({ item }: { item: IndustryMark }) {
-  return (
-    <span className="partners-mark" style={{ color: item.color }}>
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        {item.mark === "spark" && <path d="M24 4 28 19l15 5-15 4-4 16-4-16-15-4 15-5 4-15Z" />}
-        {item.mark === "grid" && (
-          <>
-            <rect x="6" y="6" width="15" height="15" rx="4" />
-            <rect x="27" y="6" width="15" height="15" rx="4" />
-            <rect x="6" y="27" width="15" height="15" rx="4" />
-            <rect x="27" y="27" width="15" height="15" rx="4" />
-          </>
-        )}
-        {item.mark === "orbit" && (
-          <>
-            <circle cx="24" cy="24" r="6" />
-            <ellipse cx="24" cy="24" rx="20" ry="9" transform="rotate(-35 24 24)" />
-          </>
-        )}
-        {item.mark === "wave" && <path d="M5 18c6-8 12-8 19 0s13 8 19 0M5 30c6-8 12-8 19 0s13 8 19 0" />}
-        {item.mark === "nodes" && (
-          <>
-            <path d="m12 13 12 22 12-22H12" />
-            <circle cx="12" cy="13" r="4" />
-            <circle cx="36" cy="13" r="4" />
-            <circle cx="24" cy="35" r="4" />
-          </>
-        )}
-        {item.mark === "frame" && <path d="M8 18V8h10M30 8h10v10M40 30v10H30M18 40H8V30m7-5 6 6 12-14" />}
-      </svg>
-      <span>{item.name}</span>
-    </span>
-  );
-}
-
 export function PartnersCloud() {
-  const [tab, setTab] = useState<TabId>("colleges");
+  const [tabId, setTabId] = useState<TabId>("colleges");
+  const tab = tabs.find((t) => t.id === tabId) ?? tabs[0];
 
   return (
     <div>
       <div role="tablist" aria-label="Partner type" className="grid grid-cols-2 border-y border-line">
         {tabs.map((t) => {
-          const active = t.id === tab;
+          const active = t.id === tabId;
           return (
             <button
               key={t.id}
@@ -100,7 +82,7 @@ export function PartnersCloud() {
               id={`partners-tab-${t.id}`}
               aria-selected={active}
               aria-controls="partners-panel"
-              onClick={() => setTab(t.id)}
+              onClick={() => setTabId(t.id)}
               className="projects-tab group relative px-3 py-5 text-center sm:py-6"
               data-active={active || undefined}
             >
@@ -109,7 +91,7 @@ export function PartnersCloud() {
                   active ? "text-text" : "text-text-muted/70 group-hover:text-text-muted"
                 }`}
               >
-                {t.count}
+                {t.rows.length}
               </span>
               <span
                 className={`mt-2.5 inline-flex items-center gap-2 text-[14px] leading-[1.5] font-medium transition-colors duration-300 ${
@@ -124,28 +106,45 @@ export function PartnersCloud() {
         })}
       </div>
 
-      <div id="partners-panel" role="tabpanel" aria-labelledby={`partners-tab-${tab}`} className="px-5 py-14 sm:px-10 sm:py-16 lg:py-20">
-        <ul key={tab} className="partners-cloud flex flex-wrap justify-center gap-y-12 sm:gap-y-14 lg:gap-y-16">
-          {tab === "colleges"
-            ? colleges.map((c, i) => (
-                <li key={c.src} style={{ animationDelay: `${i * 40}ms` }}>
-                  <img
-                    src={c.src}
-                    alt={c.name}
-                    title={c.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="partners-logo"
-                    style={{ maxHeight: c.size ?? 48 }}
-                  />
-                </li>
-              ))
-            : industry.map((m, i) => (
-                <li key={m.name} style={{ animationDelay: `${i * 40}ms` }}>
-                  <SectorMark item={m} />
-                </li>
-              ))}
-        </ul>
+      <div id="partners-panel" role="tabpanel" aria-labelledby={`partners-tab-${tab.id}`}>
+        <table className="partners-table w-full text-left">
+          <caption className="sr-only">{tab.label}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Partner</th>
+              <th scope="col" className="max-sm:hidden">
+                {tab.detail}
+              </th>
+              <th scope="col" className="w-[1%] whitespace-nowrap">
+                Type
+              </th>
+            </tr>
+          </thead>
+          <tbody key={tab.id}>
+            {tab.rows.map((r, i) => (
+              <tr key={r.name} style={{ animationDelay: `${i * 30}ms` }}>
+                <td>
+                  <div className="flex items-center gap-4 sm:gap-5">
+                    <span className="partners-table__logo">
+                      <img src={r.src} alt="" loading="lazy" decoding="async" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[15px] leading-[1.4] font-medium text-text">{r.name}</p>
+                      <p className="mt-0.5 text-[13px] leading-[1.5] text-text-muted sm:hidden">{r.detail}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="text-[14px] leading-[1.5] text-text-muted max-sm:hidden">{r.detail}</td>
+                <td className="whitespace-nowrap">
+                  <span className="flex items-center gap-2 text-[14px] leading-[1.5] text-text-muted">
+                    <i className="h-1.5 w-1.5 rounded-full" style={{ background: r.kind.color }} aria-hidden="true" />
+                    {r.kind.label}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

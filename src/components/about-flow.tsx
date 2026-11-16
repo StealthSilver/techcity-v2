@@ -140,6 +140,8 @@ export function AboutFlow() {
   const nodeLabelRef = useRef<HTMLDivElement>(null);
   const titleRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  /** Set by the effect: plays a step in place while the story is held (after coming up from below). */
+  const jumpRef = useRef<((step: number) => boolean) | null>(null);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -509,7 +511,7 @@ export function AboutFlow() {
     const frame = (time: number) => {
       const dt = Math.min(0.1, (time - last) / 1000);
       last = time;
-      readTarget();
+      if (!frozen) readTarget();
       const diff = target - s;
       if (reduceMotion) s = target;
       else if (diff !== 0) {
@@ -523,6 +525,48 @@ export function AboutFlow() {
       draw(time);
       raf = visible ? requestAnimationFrame(frame) : 0;
     };
+    // Coming back up from below, the story shouldn't replay in reverse. On entering from
+    // below, collapse the pinned track to one screen (scrolling by the same amount so
+    // nothing visibly moves) and hold the finished state, so the section simply passes.
+    // Once it's fully below the viewport again, restore it for the next pass down.
+    let frozen = false;
+    // Where the section last was while out of view: "above" means the reader was below it.
+    let lastSide: "above" | "below" | null = null;
+    const freeze = () => {
+      const before = track.offsetHeight;
+      track.style.height = `${stage.offsetHeight}px`;
+      const delta = before - track.offsetHeight;
+      if (delta > 0) window.scrollBy({ top: -delta, behavior: "instant" });
+      frozen = true;
+      s = target = STEPS;
+      draw(performance.now());
+    };
+    const release = () => {
+      track.style.height = "";
+      frozen = false;
+      s = target = 0;
+    };
+    const checkSide = () => {
+      const r = track.getBoundingClientRect();
+      if (r.bottom <= 0) lastSide = "above";
+      else if (r.top >= window.innerHeight) {
+        lastSide = "below";
+        if (frozen) release();
+      } else if (!frozen && lastSide === "above") freeze();
+    };
+    window.addEventListener("scroll", checkSide, { passive: true });
+    checkSide();
+
+    jumpRef.current = (step) => {
+      if (!frozen) return false;
+      target = step; // play in place: the track is collapsed, so there's nothing to scroll
+      if (!raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      }
+      return true;
+    };
+
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       if (visible && !raf) {
@@ -546,10 +590,14 @@ export function AboutFlow() {
       io.disconnect();
       ro.disconnect();
       stage.removeEventListener("pointermove", onPointer);
+      jumpRef.current = null;
+      window.removeEventListener("scroll", checkSide);
+      track.style.height = "";
     };
   }, []);
 
   const goTo = (step: number) => {
+    if (jumpRef.current?.(step)) return;
     const track = trackRef.current;
     const stage = stageRef.current;
     if (!track || !stage) return;
