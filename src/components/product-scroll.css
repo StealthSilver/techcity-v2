@@ -1,0 +1,91 @@
+/* ---------------------------------------------------------------
+   Products, desktop (src/components/product-scroll.tsx): the left column
+   holds the product in focus at the top and its scene at the bottom; the
+   stack keeps the dotted panel on the right.
+   --------------------------------------------------------------- */
+.pscroll__left {
+  /* The scene's width (see .pscroll__scene) and the text indent that lines the copy
+     up with the scene's window (48 design px into a 600-wide stage, so 0.92 of the
+     scene's width from the column's right edge). 100% resolves against the column. */
+  --sw: min(100%, calc((max(100svh - 64px, 640px) - 270px) * 1.0857));
+  --indent: clamp(48px, calc(100% - 0.92 * var(--sw)), 72px);
+  position: relative;
+  height: 100%;
+  /* Crops the scene at the panel border and the section foot, but leaves room on the
+     left for the label's bullet and its rings, which sit centred on the border line. */
+  clip-path: inset(0 0 0 -24px);
+}
+
+/* Intro headline, centred in the column before the first product. */
+.pscroll__intro-wrap {
+  position: absolute;
+  top: 50%;
+  left: 48px;
+  right: 40px;
+  max-width: 480px;
+}
+
+/* The product in focus: label on the border line, then headline, blurb, link. */
+.pscroll__block {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  will-change: transform, opacity;
+}
+.pscroll__block-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 24px;
+  padding-left: var(--indent);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.pscroll__block .pscroll__name {
+  color: var(--text);
+}
+.pscroll__block .pscroll__cat {
+  opacity: 1;
+}
+.pscroll__block .pscroll__bullet {
+  box-shadow:
+    inset 0 0 0 1px var(--c),
+    0 0 0 5px color-mix(in srgb, var(--c) 14%, transparent),
+    0 0 0 10px color-mix(in srgb, var(--c) 6%, transparent);
+}
+.pscroll__block .pscroll__bullet::after {
+  background: var(--c);
+}
+.pscroll__block .pscroll__headline {
+  margin-top: 18px;
+  padding-left: var(--indent);
+}
+.pscroll__block .pscroll__blurb {
+  padding-left: var(--indent);
+  max-width: calc(var(--indent) + 400px);
+}
+.pscroll__block .pscroll__more {
+  margin-left: var(--indent);
+}
+
+/* Progress: down the left border from just under the label to the section's foot. */
+.pscroll__progress--full {
+  top: 72px;
+  bottom: 0;
+  transition: opacity 300ms var(--ease-out);
+}
+
+/* The scene: the column's full width, pinned to its foot; the window runs off the
+   bottom and stops at the stack panel's border. On short screens it scales down
+   (pinned right, so the crop still lands on that border) to clear the text. */
+.pscroll__scene {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  /* --sw on .pscroll__left. Measured: the highest thing in any scene (Riyaaz's streak
+     chip) sits 0.92 x the scene's width above the column's foot, and the text block ends
+     ~258px down, so (H - 270px) / 0.92 keeps the chip 12px clear of it. */
+  width: var(--sw);
+}

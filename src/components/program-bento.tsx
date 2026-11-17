@@ -5,15 +5,18 @@ import { FacultyItem } from "@/components/bento/faculty";
 import { MentorshipItem } from "@/components/bento/mentorship";
 import { OnlineItem } from "@/components/bento/online";
 import { PlacementItem } from "@/components/bento/placement";
-import { PlacingItem } from "@/components/bento/placing";
 import { PlatformsItem } from "@/components/bento/platforms";
 import { TrainersItem } from "@/components/bento/trainers";
-import { programBento, type BentoSize } from "@/lib/programs";
+import { Icon } from "@/components/icons";
+import { NumberTicker } from "@/components/number-ticker";
+import { InView } from "@/components/in-view";
+import { programBento, type BentoProgram, type BentoSize } from "@/lib/programs";
 
 /**
- * Programs bento grid, modelled on stripe.com's product bento: white cards with
- * a title top-left, an expand button top-right, and a living gradient scene in
- * the lower part of the card.
+ * Programs bento grid. Every card shares one frame: an icon tile and audience
+ * label, an arrow top-right, a run-in headline (bold lead, muted sentence), and
+ * a picture in the lower part of the card. The pictures vary in kind so the grid
+ * reads as one composition: product scenes, one stat on navy, one collection.
  *
  * Every scene is built the same way, so the grid reads as one system:
  *   1. a soft mesh of drifting colour glows (CSS radial gradients), and
@@ -190,10 +193,10 @@ export function SceneArt({ id, scene }: { id: string; scene: Scene }) {
   );
 }
 
-function ExpandIcon() {
+function ArrowIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M8.5 1.75h3.75V5.5M5.5 12.25H1.75V8.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -201,7 +204,6 @@ function ExpandIcon() {
 const items: Record<string, ComponentType> = {
   trainers: TrainersItem,
   placement: PlacementItem,
-  placing: PlacingItem,
   mentorship: MentorshipItem,
   faculty: FacultyItem,
   online: OnlineItem,
@@ -215,24 +217,66 @@ const sizeClass: Record<BentoSize, string> = {
   small: "",
 };
 
+/** Icon tile, audience and arrow, then the run-in headline. */
+function CardCopy({ p, wide }: { p: BentoProgram; wide: boolean }) {
+  return (
+    <div className="relative z-[1] p-6 lg:p-7">
+      <div className="flex items-center justify-between gap-4">
+        <span className="flex items-center gap-3">
+          <span className="bento-icon" aria-hidden="true">
+            <Icon name={p.icon} size={18} />
+          </span>
+          <span className="bento-audience">{p.audience}</span>
+        </span>
+        <span className="bento-expand" aria-hidden="true">
+          <ArrowIcon />
+        </span>
+      </div>
+      <div
+        className={`mt-5 text-[17px] leading-[1.45] tracking-[-0.01em] lg:text-[18px] ${
+          wide ? "max-w-[46ch]" : "max-w-[34ch]"
+        }`}
+      >
+        <h3 className="bento-lead inline font-medium">{p.lead}</h3>{" "}
+        <span className="bento-body">{p.body}</span>
+      </div>
+    </div>
+  );
+}
+
+/** Placing: the one stat tile, on navy. A real figure from the site's numbers. */
+function PlacingStat() {
+  return (
+    <InView className="bento-stat" threshold={0.5}>
+      <span className="bento-stat__lead">Placement network</span>
+      <span className="bento-stat__row">
+        <span className="bento-stat__num">
+          <NumberTicker value="50+" />
+        </span>
+        <span className="bento-stat__label">industry partners</span>
+      </span>
+    </InView>
+  );
+}
+
 export function ProgramBento() {
   return (
     <div className="bento-grid grid grid-flow-dense grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {programBento.map((p) => {
         const Item = items[p.anchor];
+        const stat = p.anchor === "placing";
         return (
-          <Link key={p.anchor} href={`/programs#${p.anchor}`} className={`bento-card group ${sizeClass[p.size]}`}>
-            <SceneArt id={p.anchor} scene={scenes[p.anchor]} />
-            <div className="relative z-[1] flex items-start justify-between gap-6 p-6 lg:p-7">
-              <h3 className="max-w-[24ch] text-[18px] leading-[1.3] font-normal tracking-[-0.02em] text-text lg:text-[20px]">
-                {p.title}
-              </h3>
-              <span className="bento-expand" aria-hidden="true">
-                <ExpandIcon />
-              </span>
-            </div>
+          <Link
+            key={p.anchor}
+            href={`/programs#${p.anchor}`}
+            className={`bento-card group ${sizeClass[p.size]}`}
+            data-kind={stat ? "stat" : undefined}
+            data-program={p.anchor}
+          >
+            {!stat && <SceneArt id={p.anchor} scene={scenes[p.anchor]} />}
+            <CardCopy p={p} wide={p.size === "wide"} />
             <div className="bento-ill" data-program={p.anchor}>
-              {Item && <Item />}
+              {stat ? <PlacingStat /> : Item && <Item />}
             </div>
           </Link>
         );

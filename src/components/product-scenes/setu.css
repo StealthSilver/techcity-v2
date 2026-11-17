@@ -1,0 +1,143 @@
+/* One window, corner bleed: inset top and left, off the right and the bottom. */
+.tc-setu .st-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  width: 640px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-setu .ss-stage[data-layout='compact'] .st-win {
+  top: 16px;
+  left: 16px;
+  width: 400px;
+}
+
+.tc-setu .st-body {
+  min-height: 520px;
+  padding: 16px 24px 0;
+  background: var(--ss-surface);
+}
+.tc-setu .ss-stage[data-layout='compact'] .st-body {
+  padding: 14px 14px 0;
+}
+
+.tc-setu .st-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 14px;
+}
+.tc-setu .st-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--ss-text);
+  white-space: nowrap;
+}
+.tc-setu .st-count .ss-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ss-text-strong);
+}
+.tc-setu .st-meter {
+  width: 180px;
+}
+.tc-setu .ss-stage[data-layout='compact'] .st-meter {
+  width: 110px;
+}
+
+.tc-setu .st-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px 104px 96px;
+  align-items: center;
+  gap: 16px;
+  height: 48px;
+  border-top: 1px solid var(--ss-line-faint);
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.tc-setu .ss-stage[data-layout='compact'] .st-row {
+  grid-template-columns: minmax(0, 1fr) 72px 92px 64px;
+  gap: 10px;
+}
+.tc-setu .st-row--head {
+  height: 34px;
+  color: var(--ss-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+.tc-setu .st-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.tc-setu .st-who > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tc-setu .st-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tc-setu .st-of {
+  margin-left: 8px;
+  color: var(--ss-text-faint);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.tc-setu .st-of[data-show] {
+  opacity: 1;
+}
+.tc-setu .st-val[data-empty] {
+  color: var(--ss-text-faint);
+}
+
+/* The edited cell: the ring is drawn inside it, so the value never moves. */
+.tc-setu .st-cell {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 32px;
+}
+.tc-setu .st-ring {
+  position: absolute;
+  inset: 0 -8px;
+  border-radius: var(--ss-radius-sm);
+  box-shadow: inset 0 0 0 1.5px var(--ss-accent), 0 0 0 3px var(--ss-accent-soft);
+  background: var(--ss-surface);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.tc-setu .st-cell[data-edit] .st-ring {
+  opacity: 1;
+}
+.tc-setu .st-cell::before {
+  content: '';
+  position: absolute;
+  inset: -6px -8px;
+  border-radius: var(--ss-radius-sm);
+  background: var(--ss-accent-soft);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.tc-setu .st-cell[data-wash]::before {
+  opacity: 1;
+  transition-duration: 0.1s;
+}
+.tc-setu .st-text {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.tc-setu .st-caret {
+  width: 1.5px;
+  height: 16px;
+  margin-left: 1px;
+  margin-right: -2.5px;
+  background: var(--ss-accent);
+  animation: ss-caret 1.06s steps(1) 0.5s infinite;
+}

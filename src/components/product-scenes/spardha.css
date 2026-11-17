@@ -1,0 +1,100 @@
+/* Pinned, bottom bleed: one gutter left, right and top, off the bottom. */
+.tc-spardha .sp-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  right: 48px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-spardha .ss-stage[data-layout='compact'] .sp-win {
+  top: 16px;
+  left: 16px;
+  right: 16px;
+}
+.tc-spardha .sp-body {
+  position: relative;
+  min-height: 520px;
+  padding: 14px 16px 0;
+  background: var(--ss-surface);
+}
+.tc-spardha .sp-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 12px;
+}
+.tc-spardha .sp-meta {
+  font-size: 12px;
+  color: var(--ss-text);
+}
+.tc-spardha .sp-list {
+  position: relative;
+}
+/* Every row sits at its slot by a transform, so a climb is a glide. */
+.tc-spardha .sp-slot {
+  position: absolute;
+  inset: 0 0 auto;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 44px 52px;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  padding: 0 10px;
+  border-radius: var(--ss-radius-md);
+  font-size: 13px;
+  color: var(--ss-text-strong);
+  white-space: nowrap;
+  transition: transform 0.9s cubic-bezier(0.45, 0, 0.1, 1);
+}
+.tc-spardha .sp-slot[data-you] {
+  z-index: 1;
+  background: var(--ss-accent-soft);
+  font-weight: 600;
+}
+.tc-spardha .sp-slot + .sp-slot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: var(--ss-line-faint);
+}
+.tc-spardha .sp-slot[data-you]::before,
+.tc-spardha .sp-slot[data-you] + .sp-slot::before {
+  display: none;
+}
+.tc-spardha .sp-rank {
+  color: var(--ss-text);
+  font-variant-numeric: tabular-nums;
+}
+.tc-spardha .sp-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.tc-spardha .sp-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tc-spardha .sp-solved {
+  color: var(--ss-text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tc-spardha .sp-score {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tc-spardha .sp-toast {
+  position: absolute;
+  top: 9px;
+  right: 16px;
+}
+.tc-spardha .sp-plus {
+  margin-left: 4px;
+  color: #fcd38a;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

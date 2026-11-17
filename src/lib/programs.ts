@@ -22,23 +22,93 @@ export const partnerPrograms = [
 ] satisfies { title: string; items: { anchor: string; label: string; description: string; icon: IconName }[] }[];
 
 /**
- * Homepage bento: all eight programs, in reading order. `size` sets the card's
- * footprint on the desktop grid (3 columns, 4 rows):
+ * Homepage bento: all eight programs, students first (rows 1–2), then colleges
+ * (rows 3–4). `size` sets the card's footprint on the desktop grid (3 columns):
  *
  *   trainers   trainers   placement
  *   placing    mentor     placement
- *   faculty    online     online
  *   faculty    content    platforms
+ *   faculty    online     online
+ *
+ * Tile kinds are mixed on purpose: product scenes, one stat (placing, on navy)
+ * and one collection (platforms). Copy is a run-in: a bold `lead` and a muted
+ * `body` sentence at the same size.
  */
 export type BentoSize = "wide" | "tall" | "small";
+export type BentoAudience = "For students" | "For colleges";
 
-export const programBento = [
-  { anchor: "trainers", title: "Bring industry trainers to campus, across 30+ subjects", size: "wide" },
-  { anchor: "placement", title: "Prepare every student for interviews", size: "tall" },
-  { anchor: "placing", title: "Place students in their first role", size: "small" },
-  { anchor: "mentorship", title: "Pair students with industry mentors", size: "small" },
-  { anchor: "faculty", title: "Keep faculty current with the latest in tech", size: "tall" },
-  { anchor: "online", title: "Run live classes online, on any schedule", size: "wide" },
-  { anchor: "content", title: "Ready-made videos, notes and tests", size: "small" },
-  { anchor: "platforms", title: "Run your college on one platform", size: "small" },
-] satisfies { anchor: string; title: string; size: BentoSize }[];
+export type BentoProgram = {
+  anchor: string;
+  icon: IconName;
+  audience: BentoAudience;
+  lead: string;
+  body: string;
+  size: BentoSize;
+};
+
+export const programBento: BentoProgram[] = [
+  {
+    anchor: "trainers",
+    icon: "trainer",
+    audience: "For students",
+    lead: "Industry trainers on campus.",
+    body: "Practitioners teach 30+ subjects inside your timetable, alongside your own faculty.",
+    size: "wide",
+  },
+  {
+    anchor: "placement",
+    icon: "target",
+    audience: "For students",
+    lead: "Interview-ready by final year.",
+    body: "Mock interviews, aptitude drills and feedback every week.",
+    size: "tall",
+  },
+  {
+    anchor: "placing",
+    icon: "briefcase",
+    audience: "For students",
+    lead: "From campus to first offer.",
+    body: "Placement drives and referrals with the companies we work with.",
+    size: "small",
+  },
+  {
+    anchor: "mentorship",
+    icon: "compass",
+    audience: "For students",
+    lead: "Mentors from the industry.",
+    body: "One-to-one sessions with engineers who hire.",
+    size: "small",
+  },
+  {
+    anchor: "faculty",
+    icon: "faculty",
+    audience: "For colleges",
+    lead: "Faculty who stay current.",
+    body: "Hands-on labs in AI, cloud and DevOps for your teaching staff.",
+    size: "tall",
+  },
+  {
+    anchor: "content",
+    icon: "content",
+    audience: "For colleges",
+    lead: "Content, ready to teach.",
+    body: "Videos, notes and tests from day one.",
+    size: "small",
+  },
+  {
+    anchor: "platforms",
+    icon: "platform",
+    audience: "For colleges",
+    lead: "One login for everything.",
+    body: "Courses, tests, practice and placements in five connected tools.",
+    size: "small",
+  },
+  {
+    anchor: "online",
+    icon: "video",
+    audience: "For colleges",
+    lead: "Live classes, on any schedule.",
+    body: "Industry experts teach online with live coding when campus time is tight.",
+    size: "wide",
+  },
+];

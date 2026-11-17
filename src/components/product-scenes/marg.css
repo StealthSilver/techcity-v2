@@ -1,0 +1,90 @@
+/* One window, corner bleed: inset top and left, off the right and the bottom. */
+.tc-marg .mg-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  width: 600px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-marg .ss-stage[data-layout='compact'] .mg-win {
+  top: 16px;
+  left: 16px;
+  width: 400px;
+}
+.tc-marg .mg-body {
+  min-height: 520px;
+  padding: 16px 16px 0;
+  background: var(--ss-surface);
+}
+.tc-marg .mg-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 8px 14px;
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+.tc-marg .mg-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--ss-text);
+  white-space: nowrap;
+}
+.tc-marg .mg-count .ss-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ss-text-strong);
+}
+.tc-marg .mg-meter {
+  width: 200px;
+}
+.tc-marg .ss-stage[data-layout='compact'] .mg-meter {
+  width: 120px;
+}
+.tc-marg .mg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 8px;
+}
+.tc-marg .mg-title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.tc-marg .mg-sub {
+  font-size: 12px;
+}
+.tc-marg .mg-tick {
+  display: inline-flex;
+}
+.tc-marg .mg-lock {
+  display: inline-flex;
+  color: var(--ss-icon-faint);
+}
+.tc-marg .mg-row--locked {
+  opacity: 0.7;
+}
+
+.tc-marg .mg-cols {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 20px;
+}
+.tc-marg .ss-stage[data-layout='compact'] .mg-cols {
+  grid-template-columns: 294px 1fr;
+}
+.tc-marg .mg-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+}
+.tc-marg .mg-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--ss-radius-lg);
+  background: var(--ss-canvas);
+}

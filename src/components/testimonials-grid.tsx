@@ -1,23 +1,31 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { HoverArrow } from "@/components/hover-arrow";
 import { container } from "@/lib/layout";
 
 /**
- * Testimonials grid (after mintlify.com's "Trusted by…"): a heading, then six quote cards. Every few seconds one
- * card swaps to a quote not on screen (old one blurs out, new one rises in).
- * It stops offscreen and for reduced motion.
+ * Testimonials wall. From md, every quote sits in columns that drift slowly in
+ * opposite directions (pausing on hover or focus), faded at the top and bottom;
+ * three columns on desktop, two on tablet. Below md it is a swipeable row, so
+ * nothing moves under a phone reader's thumb. Each card: who they are (a
+ * college, a student or industry), the quote, then the person.
  *
  * Quotes are placeholders until approved partner quotes come in.
  */
 
-type Quote = { name: string; role: string; org: string; mark: string; tint: string; quote: string };
+type Group = "college" | "student" | "industry";
+type Quote = { name: string; group: Group; role: string; org: string; mark: string; tint: string; quote: string };
+
+const GROUP: Record<Group, { label: string; dot: string }> = {
+  college: { label: "College", dot: "var(--g-navy)" },
+  student: { label: "Student", dot: "var(--g-periwinkle)" },
+  industry: { label: "Industry", dot: "var(--g-amber)" },
+};
 
 const QUOTES: Quote[] = [
   {
     name: "Dr. Anjali Mehta",
+    group: "college",
     role: "Head of CSE",
     org: "Partner engineering college, Punjab",
     mark: "AM",
@@ -27,6 +35,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Rohit Sharma",
+    group: "college",
     role: "Training & Placement Officer",
     org: "Partner university, Haryana",
     mark: "RS",
@@ -35,6 +44,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Prof. Kavita Rao",
+    group: "college",
     role: "Faculty, Information Technology",
     org: "Partner institute, Delhi NCR",
     mark: "KR",
@@ -44,6 +54,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Arjun Verma",
+    group: "student",
     role: "Software Engineer",
     org: "Alumnus, batch of 2024",
     mark: "AV",
@@ -52,6 +63,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Neha Gupta",
+    group: "industry",
     role: "Engineering Manager",
     org: "Industry partner",
     mark: "NG",
@@ -61,6 +73,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Dr. Sanjay Kumar",
+    group: "college",
     role: "Dean of Academics",
     org: "Partner university, Uttar Pradesh",
     mark: "SK",
@@ -70,6 +83,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Priya Singh",
+    group: "student",
     role: "Final-year student, CSE",
     org: "Partner college, Rajasthan",
     mark: "PS",
@@ -78,6 +92,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Vikram Joshi",
+    group: "industry",
     role: "Talent Acquisition Lead",
     org: "Industry partner",
     mark: "VJ",
@@ -86,6 +101,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Prof. Meera Iyer",
+    group: "college",
     role: "Head of Training",
     org: "Partner institute, Chandigarh",
     mark: "MI",
@@ -95,6 +111,7 @@ const QUOTES: Quote[] = [
   },
   {
     name: "Aman Khan",
+    group: "student",
     role: "Data Analyst",
     org: "Alumnus, batch of 2023",
     mark: "AK",
@@ -103,88 +120,109 @@ const QUOTES: Quote[] = [
   },
 ];
 
-const SLOTS = 6;
-const EVERY = 3200; // ms between swaps
+/**
+ * Column layouts, by initials, so each column mixes colleges, students and
+ * industry rather than stacking one kind (dealing round-robin clumps them).
+ */
+const LAYOUT: Record<2 | 3, string[][]> = {
+  3: [
+    ["AM", "PS", "VJ", "MI"],
+    ["AV", "NG", "SK"],
+    ["RS", "AK", "KR"],
+  ],
+  2: [
+    ["AM", "NG", "PS", "VJ", "KR"],
+    ["AV", "RS", "SK", "AK", "MI"],
+  ],
+};
+const columns = (n: 2 | 3) => LAYOUT[n].map((col) => col.map((m) => QUOTES.find((q) => q.mark === m)!));
+
+/** One drifting column: the quotes twice over, so the loop has no seam. */
+function Column({ items, duration, reverse }: { items: Quote[]; duration: number; reverse?: boolean }) {
+  return (
+    <div className="tm-col" data-reverse={reverse || undefined} style={{ "--dur": `${duration}s` } as CSSProperties}>
+      <div className="tm-track">
+        {[0, 1].map((copy) => (
+          <ul key={copy} className="tm-copy" aria-hidden={copy === 1 || undefined}>
+            {items.map((q) => (
+              <li key={q.name}>
+                <QuoteCard q={q} />
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function TestimonialsGrid() {
-  const ref = useRef<HTMLDivElement>(null);
-  /** Quote index shown in each slot, and the one it is leaving (for the exit fade). */
-  const [slots, setSlots] = useState(() => Array.from({ length: SLOTS }, (_, i) => ({ cur: i, prev: -1, n: 0 })));
-  const [visible, setVisible] = useState(false);
-  const lastSlot = useRef(-1);
-
-  useEffect(() => {
-    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.2 });
-    if (ref.current) io.observe(ref.current);
-    return () => io.disconnect();
-  }, []);
-
-  const running = visible;
-
-  useEffect(() => {
-    if (!running || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => {
-      setSlots((s) => {
-        const shown = new Set(s.map((x) => x.cur));
-        const free = QUOTES.map((_, i) => i).filter((i) => !shown.has(i));
-        // Never the same slot twice in a row, so the change is easy to notice.
-        let slot = Math.floor(Math.random() * SLOTS);
-        if (slot === lastSlot.current) slot = (slot + 1 + Math.floor(Math.random() * (SLOTS - 1))) % SLOTS;
-        lastSlot.current = slot;
-        const next = free[Math.floor(Math.random() * free.length)];
-        return s.map((x, i) => (i === slot ? { cur: next, prev: x.cur, n: x.n + 1 } : x));
-      });
-    }, EVERY);
-    return () => clearInterval(id);
-  }, [running]);
-
   return (
     <section id="testimonials" className="scroll-mt-20">
-      <div ref={ref} className={`${container} border-x border-b border-line`}>
-        <div className="relative flex flex-col gap-6 px-5 pt-12 pb-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-14 sm:pb-10">
+      <div className={`${container} border-x border-b border-line`}>
+        <div className="flex flex-col gap-6 px-5 pt-12 pb-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-14 sm:pb-10">
           <h2 className="max-w-[760px] text-[clamp(24px,2.6vw,32px)] leading-[1.25] font-normal tracking-[-0.02em] text-text">
-            Trusted by colleges, faculty and the teams that hire.
+            In their words.{" "}
+            <span className="text-text-muted">
+              Heads of department, placement officers, students and the teams that hire them.
+            </span>
           </h2>
-          <Link href="/company/testimonials" className="btn btn-primary btn-lg shrink-0 self-start sm:self-auto">
-            Read more
+          <Link
+            href="/company/testimonials"
+            className="btn btn-secondary btn-lg shrink-0 self-start shadow-[var(--shadow-btn)] sm:self-auto"
+          >
+            All stories
             <HoverArrow />
           </Link>
         </div>
 
-        <div className="border-t border-line p-4 sm:p-5">
-<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" aria-live="off">
-            {slots.map((s, i) => (
-              <figure key={i} className={`tm-card relative h-[248px] overflow-hidden rounded-[6px] sm:h-[264px] ${i >= 3 ? "hidden md:block" : ""}`}>
-                {s.prev >= 0 && <QuoteBody key={`out-${s.n}`} q={QUOTES[s.prev]} className="tm-out" />}
-                <QuoteBody key={`in-${s.n}`} q={QUOTES[s.cur]} className={s.n ? "tm-in" : ""} />
-              </figure>
+        <div className="border-t border-line bg-[var(--surface-subdued)] py-5 md:px-5">
+          {/* Desktop: three drifting columns. */}
+          <div className="tm-wall" data-at="lg">
+            {columns(3).map((items, i) => (
+              <Column key={i} items={items} duration={[64, 56, 70][i]} reverse={i === 1} />
             ))}
           </div>
+          {/* Tablet: two. */}
+          <div className="tm-wall" data-at="md">
+            {columns(2).map((items, i) => (
+              <Column key={i} items={items} duration={[80, 72][i]} reverse={i === 1} />
+            ))}
+          </div>
+          {/* Phones: swipe through them. */}
+          <ul className="tm-row" aria-label="Testimonials">
+            {QUOTES.map((q) => (
+              <li key={q.name}>
+                <QuoteCard q={q} />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
   );
 }
 
-function QuoteBody({ q, className = "" }: { q: Quote; className?: string }) {
+function QuoteCard({ q }: { q: Quote }) {
+  const g = GROUP[q.group];
   return (
-    <div className={`absolute inset-0 flex flex-col gap-7 p-4 sm:p-5 ${className}`}>
-      <div className="flex items-center gap-3">
-        <div
-          aria-hidden="true"
-          className="flex size-12 shrink-0 items-center justify-center rounded-[4px] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)] text-[15px] font-semibold tracking-[-0.02em]"
-          style={{ color: q.tint }}
-        >
+    <figure className="tm-quote">
+      <span className="tm-tag" style={{ "--dot": g.dot } as CSSProperties}>
+        <i aria-hidden="true" />
+        {g.label}
+      </span>
+      <blockquote className="text-[15px] leading-[1.65] text-text-soft">{q.quote}</blockquote>
+      <figcaption className="mt-auto flex items-center gap-3">
+        <span className="tm-avatar" style={{ "--tint": q.tint } as CSSProperties} aria-hidden="true">
           {q.mark}
-        </div>
-        <div className="flex min-w-0 flex-col gap-0.5">
-          <figcaption className="truncate text-[14px] leading-5 font-medium text-text">{q.name}</figcaption>
-          <span className="line-clamp-2 text-[13px] leading-[18px] text-text-muted sm:truncate sm:text-[14px] sm:leading-5">
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[14px] leading-5 font-medium text-text">{q.name}</span>
+          <span className="block text-[13px] leading-[18px] text-text-muted">
             {q.role}, {q.org}
           </span>
-        </div>
-      </div>
-      <blockquote className="line-clamp-6 text-[15px] leading-[1.65] text-text-soft">{q.quote}</blockquote>
-    </div>
+        </span>
+      </figcaption>
+    </figure>
   );
 }

@@ -1631,7 +1631,6 @@ a:focus-visible > .product-tile {
 /* Small floating tags and pills share the slab shadow. */
 .bx-tt__count,
 .bx-chat__tag,
-.bx-dash__chip,
 .bx-iv__badge {
   background: var(--bg);
   box-shadow:
@@ -1856,8 +1855,7 @@ a:focus-visible > .product-tile {
   color: #7A4300;
   background: color-mix(in srgb, var(--g-amber) 10%, var(--bg));
 }
-.bx-iv__badge .bx-check,
-.bx-offer .bx-check {
+.bx-iv__badge .bx-check {
   background: var(--g-amber);
 }
 @container (max-height: 470px) {
@@ -1867,126 +1865,6 @@ a:focus-visible > .product-tile {
   .bx-iv {
     justify-content: flex-start;
   }
-}
-
-/* 3. Placing: application to offer --------------------------------- */
-.bx-job {
-  padding: 12px 14px;
-}
-.bx-job--back {
-  display: flex;
-  width: 72%;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px 18px;
-  background: var(--surface-subdued);
-}
-.bx-job--back .bx-title {
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
-.bx-job--main {
-  top: 58px;
-  left: 0;
-  width: 90%;
-}
-.bx-job__mark {
-  display: inline-flex;
-  width: 30px;
-  height: 30px;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  color: #fff;
-  background: var(--g-navy);
-}
-.bx-job__mark svg {
-  width: 16px;
-  height: 16px;
-}
-.bx-steps {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-top: 14px;
-}
-.bx-steps::before,
-.bx-steps::after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 12.5%;
-  height: 1.5px;
-  background: var(--line);
-}
-.bx-steps::before {
-  right: 12.5%;
-}
-.bx-steps::after {
-  width: calc(75% * var(--p));
-  background: var(--g-navy);
-  transition: width 700ms var(--ease-out);
-}
-.bx-steps li {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  font-size: 9.5px;
-  color: var(--text-muted);
-  transition: color 400ms;
-}
-.bx-steps i {
-  width: 11px;
-  height: 11px;
-  border-radius: 999px;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1.5px var(--line);
-  transition: background-color 400ms, box-shadow 400ms;
-}
-.bx-steps li[data-done] {
-  color: var(--text);
-}
-.bx-steps li[data-done] i {
-  background: var(--g-navy);
-  box-shadow: inset 0 0 0 1.5px var(--g-navy);
-}
-.bx-steps li[data-current] i {
-  box-shadow:
-    inset 0 0 0 1.5px var(--g-navy),
-    0 0 0 4px color-mix(in srgb, var(--g-lavender) 45%, transparent);
-}
-.bx-offer {
-  right: -5%;
-  bottom: 0;
-  width: 76%;
-  padding: 12px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--g-cream) 75%, var(--bg)), var(--bg) 70%);
-}
-.bx-burst {
-  position: absolute;
-  top: 22px;
-  left: 22px;
-}
-.bx-burst i {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  margin: -2.5px;
-  border-radius: 999px;
-  opacity: 0;
-}
-.bx-burst[data-on] i {
-  animation: bx-burst 1s var(--ease-out) forwards;
-}
-@keyframes bx-burst {
-  0% { opacity: 1; transform: scale(0.4); }
-  70% { opacity: 1; }
-  100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1); }
 }
 
 /* 4. Mentorship: one-to-one chat ----------------------------------- */
@@ -2535,166 +2413,6 @@ a:focus-visible > .product-tile {
   box-shadow: inset 0 0 0 3px var(--g-navy);
 }
 
-/* 8. Platforms: college dashboard ---------------------------------- */
-.bx-dash {
-  top: 18px;
-  left: 0;
-  width: 94%;
-}
-.bx-dash__logo {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, var(--g-indigo), var(--g-navy));
-}
-.bx-dash__search {
-  width: 76px;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--text-muted);
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-.bx-dash__nav {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 6px;
-  border-right: 1px solid var(--line);
-}
-.bx-dash__nav > i {
-  position: absolute;
-  top: 8px;
-  left: 6px;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: var(--g-mist);
-  transform: translateY(calc(var(--i) * 32px));
-  transition: transform 600ms var(--ease-out);
-}
-.bx-dash__nav > span {
-  position: relative;
-  display: inline-flex;
-  width: 28px;
-  height: 28px;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: color 400ms;
-}
-.bx-dash__nav > span[data-on] {
-  color: var(--g-navy);
-}
-.bx-dash__nav svg {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.bx-dash__main {
-  position: relative;
-  flex: 1;
-  min-height: 136px;
-  padding: 10px 12px;
-}
-.bx-view {
-  position: absolute;
-  top: 28px;
-  right: 12px;
-  left: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out);
-}
-.bx-view[data-on] {
-  opacity: 1;
-  transform: none;
-}
-.bx-big {
-  font-size: 22px;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-.bx-hist,
-.bx-week {
-  display: flex;
-  height: 56px;
-  align-items: flex-end;
-  gap: 4px;
-}
-.bx-hist i {
-  flex: 1;
-  height: calc(var(--v) * 100%);
-  border-radius: 3px 3px 1px 1px;
-  background: var(--g-lavender);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 600ms var(--ease-out);
-}
-.bx-hist i:nth-child(5) {
-  background: var(--g-navy);
-}
-.bx-hist i[data-on],
-.bx-week i[data-on] {
-  transform: scaleY(1);
-}
-.bx-week {
-  gap: 6px;
-}
-.bx-week > span {
-  display: flex;
-  height: 100%;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 3px;
-  font-size: 9px;
-  color: var(--text-muted);
-}
-.bx-week i {
-  width: 100%;
-  height: calc(var(--v) * 40px);
-  border-radius: 3px 3px 1px 1px;
-  background: color-mix(in srgb, var(--g-periwinkle) 75%, var(--bg));
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 600ms var(--ease-out);
-}
-.bx-offer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 8px;
-  border-radius: 7px;
-  font-size: 11px;
-  color: var(--text);
-  background: var(--surface-subdued);
-}
-.bx-dash__chip {
-  right: -3%;
-  bottom: 3%;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 11px 5px 6px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 500;
-  white-space: nowrap;
-  color: var(--text);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .bx-tilt,
   .bx-in,
@@ -2702,7 +2420,6 @@ a:focus-visible > .product-tile {
   .bx-pop,
   .bx-fill,
   .bx-doc,
-  .bx-view,
   .bx-tt__class {
     transition: none;
   }
@@ -2710,8 +2427,7 @@ a:focus-visible > .product-tile {
   .bx-caret,
   .bx-wave i,
   .bx-iv__speaker,
-  .bx-typing i,
-  .bx-burst i {
+  .bx-typing i {
     animation: none;
   }
 }
@@ -3074,79 +2790,10 @@ a:focus-visible > .product-tile {
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 
-/* ---------------------------------------------------------------
-   Partners table (src/components/partners-cloud.tsx): rows ruled with the
-   page's guide lines, text aligned with the section copy (20px / 40px).
-   --------------------------------------------------------------- */
-.partners-table {
-  border-collapse: collapse;
-}
-.partners-table th {
-  padding: 14px 20px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  background: var(--surface-subdued);
-  border-bottom: 1px solid var(--line);
-}
-.partners-table td {
-  padding: 14px 20px;
-  vertical-align: middle;
-}
-.partners-table tbody tr {
-  animation: projects-card-in 500ms var(--ease-out) both;
-  transition: background-color 200ms var(--ease-out);
-}
-.partners-table tbody tr + tr {
-  border-top: 1px solid var(--line);
-}
-.partners-table tbody tr:hover {
-  background: color-mix(in srgb, var(--surface-subdued) 60%, transparent);
-}
-@media (min-width: 640px) {
-  .partners-table th,
-  .partners-table td {
-    padding-inline: 40px;
-  }
-  .partners-table td {
-    padding-block: 16px;
-  }
-}
-/* A fixed white tile so wide wordmarks and square crests sit evenly. */
-.partners-table__logo {
-  display: inline-flex;
-  flex: none;
-  width: 104px;
-  height: 48px;
-  padding: 6px 8px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-.partners-table__logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-@media (min-width: 640px) {
-  .partners-table__logo {
-    width: 132px;
-    height: 52px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .partners-table tbody tr {
-    animation: none;
-  }
-}
 
 /* ---------------------------------------------------------------
-   About (src/components/about-section.tsx): odometer numbers and the
-   four-chapter story line. Both animate once, when `InView` sets data-in.
+   Odometer numbers (src/components/number-ticker.tsx), used in About and
+   Programs. They roll once, when an `InView` ancestor sets data-in.
    --------------------------------------------------------------- */
 
 /* Odometer: each digit is a 1em window over a strip of 21 digits (0–9 twice,
@@ -3181,160 +2828,10 @@ a:focus-visible > .product-tile {
   transform: translateY(-20em);
 }
 
-/* Story card: the gradient scene sits low so the chapters stay on white. */
-.about-story .bento-bg {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 45%, #000 88%);
-  mask-image: linear-gradient(to bottom, transparent 45%, #000 88%);
-}
-/* Phones and tablets: the chapters stack, so keep the scene to a strip below them. */
-@media (max-width: 1023px) {
-  .about-story .bento-bg {
-    top: auto;
-    height: 220px;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 70%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 70%);
-  }
-}
-.about-chapter {
-  --step: 0.45s;
-  position: relative;
-  padding: 0 0 32px 34px; /* phones: a vertical line down the left */
-}
-.about-chapter:last-child {
-  padding-bottom: 0;
-}
-@media (min-width: 1024px) {
-  .about-chapter {
-    padding: 34px 28px 0 0; /* desktop: one line across the top */
-  }
-}
-
-/* Node: a ring in the chapter's colour; the last one is filled amber. */
-.about-node {
-  position: absolute;
-  top: 2px;
-  left: 0;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 2.5px var(--c);
-  opacity: 0;
-  scale: 0.3;
-  transition:
-    opacity 0.35s var(--ease-out),
-    scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transition-delay: calc(0.15s + var(--i) * var(--step));
-}
-.about-chapter:last-child .about-node {
-  background: var(--c);
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 22%, transparent);
-}
-@media (min-width: 1024px) {
-  .about-node {
-    top: 0;
-  }
-}
-
-/* Segment from this node to the next, drawn in after the node appears. */
-.about-chapter:not(:last-child)::before {
-  content: "";
-  position: absolute;
-  top: 20px;
-  bottom: 2px;
-  left: 6px;
-  width: 2px;
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--c), var(--next));
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform var(--step) linear;
-  transition-delay: calc(0.3s + var(--i) * var(--step));
-}
-@media (min-width: 1024px) {
-  .about-chapter:not(:last-child)::before {
-    top: 6px;
-    bottom: auto;
-    left: 18px;
-    right: 4px;
-    width: auto;
-    height: 2px;
-    background: linear-gradient(90deg, var(--c), var(--next));
-    transform: scaleX(0);
-    transform-origin: left;
-  }
-}
-
-.about-chapter-copy {
-  opacity: 0;
-  translate: 0 10px;
-  transition:
-    opacity 0.6s var(--ease-out),
-    translate 0.6s var(--ease-out);
-  transition-delay: calc(0.25s + var(--i) * var(--step));
-}
-
-[data-in] .about-node {
-  opacity: 1;
-  scale: 1;
-}
-[data-in] .about-chapter::before {
-  transform: none;
-}
-[data-in] .about-chapter-copy {
-  opacity: 1;
-  translate: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ticker-col {
     transform: translateY(-20em);
     transition: none;
-  }
-  .about-node,
-  .about-chapter::before,
-  .about-chapter-copy {
-    opacity: 1;
-    scale: 1;
-    translate: none;
-    transform: none;
-    transition: none;
-  }
-}
-
-/* ---------------------------------------------------------------
-   Testimonials grid (src/components/testimonials-grid.tsx), after
-   mintlify.com: tinted quote cards; one card swaps every few seconds.
-   --------------------------------------------------------------- */
-.tm-card {
-  background: var(--surface-subdued);
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-.tm-in {
-  animation: tm-in 700ms var(--ease-out) both;
-  animation-delay: 220ms;
-}
-.tm-out {
-  animation: tm-out 400ms var(--ease-out) both;
-}
-@keyframes tm-in {
-  from {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translateY(6px);
-  }
-}
-@keyframes tm-out {
-  to {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translateY(-4px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tm-in,
-  .tm-out {
-    animation-duration: 1ms;
   }
 }
 
@@ -3353,13 +2850,6 @@ a:focus-visible > .product-tile {
   opacity: 0.45;
 }
 
-/* About story card: the same quiet wash as the Programs cards. */
-.about-story .bento-bg {
-  opacity: 0.32;
-}
-.about-story .bento-blob {
-  filter: blur(40px) saturate(0.7);
-}
 
 /* ---------------------------------------------------------------
    Mobile overrides (kept last so they win over the base rules above).
@@ -3381,14 +2871,6 @@ a:focus-visible > .product-tile {
   }
   .about-flow__pill {
     bottom: max(18px, env(safe-area-inset-bottom));
-  }
-}
-
-/* Partners table on phones: smaller logo tile so the name gets the room. */
-@media (max-width: 639px) {
-  .partners-table__logo {
-    width: 88px;
-    height: 44px;
   }
 }
 
@@ -3523,3 +3005,543 @@ a:focus-visible > .product-tile {
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------
+   Programs bento, card frame (src/components/program-bento.tsx).
+   One frame for every card: icon tile + audience, arrow, run-in headline.
+   Kept last so it wins over the earlier bento rules.
+   --------------------------------------------------------------- */
+/* Phones stack the cards and the copy wraps to more lines, so they get more height. */
+.bento-grid {
+  grid-auto-rows: 410px;
+}
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-auto-rows: 380px;
+  }
+}
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-auto-rows: 420px;
+  }
+}
+.bento-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--accent);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+  transition: background-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+.bento-card:hover .bento-icon {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+.bento-audience {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.bento-lead {
+  color: var(--text);
+}
+.bento-body {
+  color: var(--text-muted);
+}
+.bento-expand svg {
+  transition: transform 0.3s var(--ease-out);
+}
+.bento-card:hover .bento-expand svg {
+  transform: translateX(2px);
+}
+
+/* The stat tile: the grid's one inverted card. */
+.bento-card[data-kind="stat"] {
+  color: #fff;
+  background:
+    radial-gradient(90% 70% at 100% 100%, color-mix(in srgb, var(--g-periwinkle) 45%, transparent), transparent 70%),
+    radial-gradient(60% 50% at 0% 100%, color-mix(in srgb, var(--g-amber) 22%, transparent), transparent 70%),
+    var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.bento-card[data-kind="stat"]:hover {
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 24px 48px -24px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.bento-card[data-kind="stat"] .bento-icon {
+  color: #fff;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+.bento-card[data-kind="stat"]:hover .bento-icon {
+  color: var(--accent);
+  background: #fff;
+}
+.bento-card[data-kind="stat"] .bento-audience {
+  color: rgb(228 232 253 / 0.7);
+}
+.bento-card[data-kind="stat"] .bento-lead {
+  color: #fff;
+}
+.bento-card[data-kind="stat"] .bento-body {
+  color: rgb(228 232 253 / 0.72);
+}
+.bento-card[data-kind="stat"] .bento-expand {
+  color: #fff;
+  background: rgb(255 255 255 / 0.1);
+}
+.bento-card[data-kind="stat"]:hover .bento-expand {
+  color: var(--accent);
+  background: #fff;
+}
+.bento-stat {
+  position: absolute;
+  inset: auto 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+@media (min-width: 1024px) {
+  .bento-stat {
+    inset: auto 28px 28px;
+  }
+}
+.bento-stat__lead {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgb(228 232 253 / 0.72);
+}
+.bento-stat__row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  white-space: nowrap;
+}
+.bento-stat__num {
+  font-size: clamp(72px, 7vw, 96px);
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+.bento-stat__label {
+  font-size: 15px;
+  color: rgb(228 232 253 / 0.85);
+}
+
+/* Platforms: the five tools as app tiles in two offset rows. */
+.bx-apps {
+  position: absolute;
+  left: 24px;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 1024px) {
+  .bx-apps {
+    left: 28px;
+    bottom: 32px;
+  }
+}
+.bx-apps__row {
+  display: flex;
+  gap: 12px;
+}
+.bx-apps__row[data-row="1"] {
+  padding-left: 46px;
+}
+.bx-apps__tile {
+  display: inline-flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 80px;
+  padding: 12px 6px 10px;
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 9%, transparent),
+    0 3px 0 -0.5px color-mix(in srgb, var(--g-lavender) 38%, var(--bg)),
+    0 18px 30px -18px color-mix(in srgb, var(--accent) 40%, transparent);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out);
+  transition-delay: calc(var(--i) * 90ms);
+}
+.bx-apps[data-in] .bx-apps__tile {
+  opacity: 1;
+  transform: none;
+}
+.bento-card:hover .bx-apps__tile {
+  transition-delay: 0ms;
+}
+.bento-card:hover .bx-apps[data-in] .bx-apps__tile:nth-child(even) {
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bx-apps__tile {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+
+
+/* ---------------------------------------------------------------
+   About grid (src/components/about-section.tsx): a ruled checkerboard of
+   chapter tiles (white) and stat tiles (tinted). 1px rules come from the
+   grid gap over the line colour, so every cell shares its edges.
+   --------------------------------------------------------------- */
+.about-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "c1 c1"
+    "c2 c2"
+    "s1 s2"
+    "c3 c3"
+    "c4 c4"
+    "s3 s4";
+}
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-areas:
+      "c1 s1"
+      "s2 c2"
+      "c3 s3"
+      "s4 c4";
+  }
+}
+@media (min-width: 1024px) {
+  .about-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-areas:
+      "c1 s1 c2 s2"
+      "s3 c3 s4 c4";
+  }
+}
+.about-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px 20px;
+  background: var(--bg);
+}
+@media (min-width: 640px) {
+  .about-cell {
+    padding: 36px 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .about-cell {
+    min-height: 280px;
+    padding: 36px 32px 32px;
+  }
+}
+.about-cell--stat {
+  background: var(--surface-subdued);
+}
+@media (max-width: 767px) {
+  .about-cell--stat {
+    padding-inline: 20px;
+  }
+}
+
+/* Chapter bar: fills along the cell's top edge, cool to warm in story order. */
+.about-cell__bar {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--from), var(--to));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-out);
+  transition-delay: calc(var(--i) * 180ms);
+}
+[data-in] .about-cell__bar {
+  transform: scaleX(1);
+}
+.about-cell--chapter .bento-icon {
+  transition-delay: calc(var(--i) * 180ms + 300ms);
+}
+[data-in] .about-cell--chapter .bento-icon {
+  color: var(--on-accent);
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.about-cell__num {
+  margin-top: 10px;
+  font-size: clamp(44px, 4.2vw, 60px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: var(--text);
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-cell__bar {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Partners wall (src/components/partners-cloud.tsx): one ruled cell per
+   partner, logos in one grayscale treatment that colours on hover, and a
+   "partner with us" cell spanning what is left of the last row.
+   --------------------------------------------------------------- */
+.partners-wall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+}
+@media (min-width: 768px) {
+  .partners-wall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .partners-wall {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.partners-wall__cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 176px;
+  padding: 20px;
+  background: var(--bg);
+  animation: projects-card-in 500ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 35ms);
+  transition: background-color 250ms var(--ease-out);
+}
+@media (min-width: 640px) {
+  .partners-wall__cell {
+    min-height: 196px;
+    padding: 28px;
+  }
+}
+.partners-wall__cell:not(.partners-wall__cta):hover {
+  background: var(--surface-subdued);
+}
+.partners-wall__logo {
+  display: flex;
+  align-items: center;
+  height: 52px;
+}
+.partners-wall__logo img {
+  max-width: min(150px, 100%);
+  max-height: 48px;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.15);
+  opacity: 0.85;
+  transition: filter 300ms var(--ease-out), opacity 300ms var(--ease-out);
+}
+.partners-wall__cell:hover .partners-wall__logo img {
+  filter: none;
+  opacity: 1;
+}
+/* Phones and touch screens: no hover, so logos keep their colour. */
+@media (hover: none) {
+  .partners-wall__logo img {
+    filter: none;
+    opacity: 1;
+  }
+}
+.partners-wall__cta {
+  grid-column: span var(--s2);
+  gap: 16px;
+  background:
+    radial-gradient(80% 120% at 100% 100%, color-mix(in srgb, var(--g-honey) 30%, transparent), transparent 70%),
+    var(--surface);
+}
+@media (min-width: 768px) {
+  .partners-wall__cta {
+    grid-column: span var(--s3);
+  }
+}
+@media (min-width: 1024px) {
+  .partners-wall__cta {
+    grid-column: span var(--s4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .partners-wall__cell {
+    animation: none;
+  }
+}
+
+
+
+/* Projects cards: the tracks taught, as quiet chips. */
+.projects-list .projects-card {
+  padding: 14px 16px;
+}
+.projects-track {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--accent);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* ---------------------------------------------------------------
+   Testimonials wall (src/components/testimonials-grid.tsx). From md: columns
+   of quotes drifting slowly in opposite directions, faded at top and bottom,
+   paused on hover. Below md: a swipeable row, nothing moves on its own.
+   --------------------------------------------------------------- */
+/* Which layout shows is set here, not with utilities: these unlayered rules
+   would otherwise override Tailwind's display classes. */
+.tm-wall {
+  display: none;
+  gap: 16px;
+  height: 620px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tm-wall[data-at="md"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .tm-wall[data-at="lg"] {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.tm-track {
+  display: flex;
+  flex-direction: column;
+  animation: tm-scroll var(--dur, 60s) linear infinite;
+}
+.tm-col[data-reverse] .tm-track {
+  animation-direction: reverse;
+}
+.tm-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+.tm-wall:hover .tm-track,
+.tm-wall:focus-within .tm-track {
+  animation-play-state: paused;
+}
+@keyframes tm-scroll {
+  to {
+    transform: translateY(-50%);
+  }
+}
+.tm-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px;
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 12px 28px -22px color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: box-shadow 250ms var(--ease-out);
+}
+.tm-quote:hover {
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 18px 36px -22px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.tm-avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--tint);
+  background: color-mix(in srgb, var(--tint) 12%, var(--bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 20%, transparent);
+}
+.tm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.tm-tag i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--dot);
+}
+/* Phones: a swipeable row of cards. */
+.tm-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  padding: 0 20px 4px;
+  scrollbar-width: none;
+}
+@media (min-width: 768px) {
+  .tm-row {
+    display: none;
+  }
+}
+.tm-row::-webkit-scrollbar {
+  display: none;
+}
+.tm-row > li {
+  flex: none;
+  width: min(84%, 340px);
+  scroll-snap-align: start;
+}
+.tm-row .tm-quote {
+  height: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tm-track {
+    animation: none;
+  }
+}
+
+

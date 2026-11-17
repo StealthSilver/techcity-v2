@@ -1,0 +1,134 @@
+/* Corner bleed: inset top and left; the player is the column the crop cuts. */
+.tc-kaksha .kk-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  width: 680px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-win {
+  top: 16px;
+  left: 16px;
+  width: 420px;
+}
+.tc-kaksha .kk-body {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 16px;
+  min-height: 520px;
+  padding: 14px 0 0 14px;
+  background: var(--ss-surface);
+}
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-body {
+  grid-template-columns: 310px 1fr;
+}
+.tc-kaksha .kk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tc-kaksha .kk-title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.tc-kaksha .kk-sub {
+  font-size: 12px;
+}
+.tc-kaksha .kk-batch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--ss-text-strong);
+}
+.tc-kaksha .kk-locked {
+  display: inline-flex;
+  color: var(--ss-icon-faint);
+}
+
+/* The player: a dark stage for the chapter, its slide as quiet bars. */
+.tc-kaksha .kk-player {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  border-radius: 10px 0 0 10px;
+  background:
+    radial-gradient(120% 100% at 90% 0%, rgb(255 255 255 / 0.18), transparent 55%),
+    linear-gradient(145deg, var(--ss-accent-2), var(--ss-accent-text));
+  overflow: hidden;
+}
+.tc-kaksha .kk-slide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 20px;
+}
+.tc-kaksha .kk-slide-tag {
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.62);
+}
+.tc-kaksha .kk-line {
+  display: block;
+  height: 7px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.45);
+}
+.tc-kaksha .kk-line--title {
+  width: 180px;
+  height: 11px;
+  margin-bottom: 4px;
+  background: rgb(255 255 255 / 0.9);
+}
+.tc-kaksha .kk-row--later {
+  opacity: 0.7;
+}
+.tc-kaksha .kk-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px 16px;
+  color: #fff;
+}
+.tc-kaksha .kk-track {
+  position: relative;
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.3);
+  overflow: hidden;
+}
+.tc-kaksha .kk-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 84%;
+  border-radius: inherit;
+  background: #fff;
+  transition: width 2.4s linear;
+}
+.tc-kaksha .kk-fill[data-played] {
+  width: 100%;
+}
+
+/* On a phone the chapter list starts one row later, so the lab and its button stay whole. */
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-row--early {
+  display: none;
+}
+
+/* On a phone the list takes the window; the player would only show as a sliver. */
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-body {
+  grid-template-columns: 1fr;
+  padding-right: 14px;
+}
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-player {
+  display: none;
+}
+.tc-kaksha .ss-stage[data-layout='compact'] .kk-win {
+  width: 326px;
+}

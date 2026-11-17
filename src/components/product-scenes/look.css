@@ -1,0 +1,50 @@
+/*
+ * TechCity product look: the site's type and inks (Inter, #061B31 text,
+ * #64748D muted, #E5EDF5 lines), and each product's own accent. The stage is
+ * transparent: the page (the Products section's dotted panel) is the ground.
+ */
+.tc .ss-stage {
+  --ss-font: var(--font-inter, "Inter"), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --ss-text-strong: #061b31;
+  --ss-text: #50617a;
+  --ss-text-faint: #8a97ad;
+  --ss-radius-window: 14px;
+  --ss-radius-lg: 10px;
+  --ss-radius-md: 8px;
+  --ss-radius-sm: 6px;
+  --ss-success: #1f9a6a;
+  --ss-success-soft: #e3f5ec;
+  --ss-success-text: #157452;
+  overflow: hidden;
+}
+
+.tc-setu .ss-stage {
+  --ss-accent: #6a4cf0;
+  --ss-accent-2: #8a6cfa;
+  --ss-accent-soft: #eeeafe;
+  --ss-accent-text: #5b3fe0;
+}
+.tc-marg .ss-stage {
+  --ss-accent: #3d6ff0;
+  --ss-accent-2: #5b8af9;
+  --ss-accent-soft: #e8effe;
+  --ss-accent-text: #2f5bd6;
+}
+.tc-spardha .ss-stage {
+  --ss-accent: #e0861c;
+  --ss-accent-2: #f4a949;
+  --ss-accent-soft: #fdf1e2;
+  --ss-accent-text: #a95f0c;
+}
+.tc-riyaaz .ss-stage {
+  --ss-accent: #1f9a82;
+  --ss-accent-2: #3bb59d;
+  --ss-accent-soft: #e2f4f0;
+  --ss-accent-text: #17765f;
+}
+.tc-kaksha .ss-stage {
+  --ss-accent: #e0466a;
+  --ss-accent-2: #ef5c7b;
+  --ss-accent-soft: #fde8ed;
+  --ss-accent-text: #b8304f;
+}

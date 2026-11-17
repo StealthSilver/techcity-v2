@@ -150,7 +150,7 @@ export function ProjectsGlobe() {
       } else {
         // Bottom-right, partly cropped by the section's right and bottom edges.
         R = Math.min(H * 0.82, W * 0.34);
-        cx = W * 0.72;
+        cx = W * 0.74;
         cy = H * 0.1 + R;
       }
       paintShell();
@@ -379,13 +379,13 @@ export function ProjectsGlobe() {
         id="projects-panel"
         role="tabpanel"
         aria-labelledby={`projects-tab-${status}`}
-        className="relative flex min-h-[460px] flex-1 flex-col overflow-hidden"
+        className="relative flex min-h-[460px] flex-1 flex-col overflow-hidden md:min-h-[520px]"
       >
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ opacity: 0 }} aria-hidden="true" />
-        {/* Projects list: above the globe below md, a column on the left from md. */}
+        {/* Projects list: above the globe below md, a column on the left from md (it sets the panel's height). */}
         <ul
           key={status}
-          className="projects-list relative z-[1] flex flex-col gap-3 px-5 pt-6 sm:px-10 md:absolute md:inset-y-0 md:left-0 md:w-[min(40%,400px)] md:justify-center md:pt-0"
+          className="projects-list relative z-[1] flex flex-col gap-3 px-5 pt-6 sm:px-10 md:my-auto md:w-[min(44%,440px)] md:py-10"
         >
           {visible.map((p, i) => (
             <li
@@ -413,13 +413,20 @@ function ProjectCardBody({ project }: { project: Project }) {
   const color = projectStatuses.find((s) => s.id === project.status)!.color;
   return (
     <>
-      <p className="flex items-start gap-2 text-[14px] leading-[1.4] font-medium text-text">
-        <i className="mt-[5px] h-2 w-2 shrink-0 rounded-full" style={{ background: color }} aria-hidden="true" />
+      <p className="flex items-start gap-2 text-[15px] leading-[1.4] font-medium text-text">
+        <i className="mt-[6px] h-2 w-2 shrink-0 rounded-full" style={{ background: color }} aria-hidden="true" />
         {project.title}
       </p>
       <p className="mt-1 pl-4 text-[13px] leading-[1.5] text-text-muted">
         {project.city} · {project.dates}
       </p>
+      <ul className="mt-2.5 flex flex-wrap gap-1.5 pl-4" aria-label="Tracks">
+        {project.tracks.map((t) => (
+          <li key={t} className="projects-track">
+            {t}
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

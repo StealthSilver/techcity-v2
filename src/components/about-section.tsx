@@ -1,61 +1,67 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { HoverArrow } from "@/components/hover-arrow";
+import { Icon, type IconName } from "@/components/icons";
 import { InView } from "@/components/in-view";
 import { NumberTicker } from "@/components/number-ticker";
-import { C, SceneArt, type Scene } from "@/components/program-bento";
+import { C } from "@/components/program-bento";
 import { container } from "@/lib/layout";
 
 /**
- * About: the company's story in four chapters along one line (cool → warm, the
- * gap to a student ready for a team), then the numbers so far. Built from the
- * page's own parts: guide-line container, headline with a muted continuation,
- * a bento-style card with a gradient ribbon, and a ruled stats row.
+ * About: a ruled grid that tells the story and shows the numbers together.
+ * Four chapter tiles (icon, number, title, one sentence) alternate with four
+ * stat tiles (one big number, a label, one line of context) in a checkerboard,
+ * so no tile sits next to its own kind:
+ *
+ *   desktop  01 · 30+ · 02 · 50+        tablet  01 · 30+     phone  01
+ *            40+ · 03 · 10K+ · 04               50+ · 02            02
+ *                                               03 · 40+            30+ · 50+
+ *                                               10K+ · 04           03 …
+ *
+ * When the grid scrolls in, each chapter's bar fills (cool → warm, in story
+ * order) and each number rolls, staggered in reading order.
  */
 
-const chapters = [
+type Chapter = { title: string; body: string; icon: IconName; from: string; to: string };
+type Stat = { value: string; label: string; context: string };
+
+const chapters: Chapter[] = [
   {
     title: "The gap",
-    body: "Graduates knew the theory but had rarely built, shipped or been reviewed. Teams had to train them from scratch.",
-    color: C.lavender,
+    body: "Graduates knew the theory but had rarely built, shipped or been reviewed.",
+    icon: "book",
+    from: C.mist,
+    to: C.lavender,
   },
   {
     title: "Inside the college",
-    body: "So we moved industry trainers onto campus, teaching inside the timetable alongside the college's own faculty.",
-    color: C.periwinkle,
+    body: "Industry trainers teach inside the timetable, alongside the college's own faculty.",
+    icon: "trainer",
+    from: C.lavender,
+    to: C.periwinkle,
   },
   {
     title: "Lab-first, always current",
-    body: "Live projects, timed practice and reviews the way a team works, with content built and refreshed with industry partners.",
-    color: C.honey,
+    body: "Live projects and reviews, with content refreshed alongside industry partners.",
+    icon: "code",
+    from: C.periwinkle,
+    to: C.honey,
   },
   {
     title: "Ready for the team",
-    body: "Placement preparation closes the loop, so campus hours map to a student's first week on the job.",
-    color: C.amber,
+    body: "Placement prep closes the loop, so campus hours map to a first week on the job.",
+    icon: "team",
+    from: C.honey,
+    to: C.amber,
   },
 ];
 
-const stats = [
-  { value: "30+", label: "Partner colleges" },
-  { value: "50+", label: "Industry partners" },
-  { value: "40+", label: "Faculty & trainers" },
-  { value: "10K+", label: "Students mentored" },
+const stats: Stat[] = [
+  { value: "30+", label: "Partner colleges", context: "Universities and institutes across north India." },
+  { value: "50+", label: "Industry partners", context: "Companies that help shape what we teach." },
+  { value: "40+", label: "Faculty & trainers", context: "Practitioners who teach on campus and online." },
+  { value: "10K+", label: "Students mentored", context: "Across every partner campus, and counting." },
 ];
-
-/** Cool on the left where the story starts, warming to amber where it ends. */
-const storyScene: Scene = {
-  blobs: [
-    { c: C.mist, x: 6, y: 96, s: 40 },
-    { c: C.lavender, x: 26, y: 104, s: 34 },
-    { c: C.cream, x: 66, y: 92, s: 40 },
-    { c: C.honey, x: 94, y: 84, s: 30 },
-  ],
-  ribbons: [
-    { y0: 262, y1: 236, bend: 34, t0: 34, t1: 46, colors: [C.mist, C.lavender, C.periwinkle], opacity: 0.75 },
-    { y0: 312, y1: 176, bend: 16, t0: 22, t1: 74, colors: [C.lavender, C.honey, C.amber], lines: true },
-  ],
-};
 
 export function AboutSection() {
   return (
@@ -63,9 +69,9 @@ export function AboutSection() {
       <div className={`${container} border-x border-b border-line`}>
         <div className="flex flex-col gap-6 px-5 pt-14 pb-10 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-16 sm:pb-12 lg:pt-20">
           <h2 className="max-w-[820px] text-[clamp(24px,2.6vw,32px)] leading-[1.25] font-normal tracking-[-0.02em] text-text">
-            Colleges were teaching the subject. Companies were hiring for the work.{" "}
+            Colleges teach the subject. Companies hire for the work.{" "}
             <span className="text-text-muted">
-              TechCity Skills closes that gap from inside the college, with its faculty, so every student leaves able
+              TechCity Skills closes that gap from inside the college, with its faculty, so every student leaves ready
               to join a team.
             </span>
           </h2>
@@ -78,44 +84,37 @@ export function AboutSection() {
           </Link>
         </div>
 
-        <div className="px-5 sm:px-10">
-          <InView className="about-story bento-card" threshold={0.3}>
-            <SceneArt id="about" scene={storyScene} />
-            <ol className="grid px-6 pt-8 pb-[170px] sm:px-8 sm:pt-10 lg:grid-cols-4 lg:pb-[190px]">
-              {chapters.map((c, i) => (
-                <li
-                  key={c.title}
-                  className="about-chapter"
-                  style={{ "--i": i, "--c": c.color, "--next": chapters[i + 1]?.color } as CSSProperties}
-                >
-                  <span className="about-node" aria-hidden="true" />
-                  <div className="about-chapter-copy">
-                    <p className="text-[13px] font-medium text-[var(--g-indigo)] tabular-nums">0{i + 1}</p>
-                    <h3 className="mt-1.5 text-[17px] leading-[1.35] font-medium tracking-[-0.01em] text-text">
-                      {c.title}
-                    </h3>
-                    <p className="mt-2 max-w-[300px] text-[14px] sm:max-w-[480px] lg:max-w-[300px] leading-[1.6] text-text-muted">{c.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </InView>
-        </div>
-
-        <InView className="mt-12 border-t border-line sm:mt-16" threshold={0.5}>
-          <dl className="grid grid-cols-2 md:grid-cols-4">
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className={`flex flex-col px-5 py-8 sm:px-10 sm:py-10 md:px-6 lg:px-10 ${i % 2 ? "border-l border-line" : ""} ${i > 1 ? "border-t border-line md:border-t-0" : ""} ${i === 2 ? "md:border-l" : ""}`}
-              >
-                <dt className="order-2 mt-3 text-[14px] leading-[1.5] text-text-muted">{s.label}</dt>
-                <dd className="text-[clamp(36px,4vw,52px)] font-normal tracking-[-0.03em] text-text">
-                  <NumberTicker value={s.value} delay={i * 0.15} />
-                </dd>
+        <InView className="about-grid" threshold={0.2}>
+          {chapters.map((c, i) => (
+            <article
+              key={c.title}
+              className="about-cell about-cell--chapter"
+              style={{ gridArea: `c${i + 1}`, "--i": i, "--from": c.from, "--to": c.to } as CSSProperties}
+            >
+              <span className="about-cell__bar" aria-hidden="true" />
+              <div className="flex items-center justify-between">
+                <span className="bento-icon" aria-hidden="true">
+                  <Icon name={c.icon} size={18} />
+                </span>
+                <span className="text-[13px] font-medium text-[var(--g-indigo)] tabular-nums">0{i + 1}</span>
               </div>
-            ))}
-          </dl>
+              <h3 className="mt-auto pt-8 text-[18px] leading-[1.3] font-medium tracking-[-0.01em] text-text">{c.title}</h3>
+              <p className="mt-2 text-[15px] leading-[1.6] text-text-muted">{c.body}</p>
+            </article>
+          ))}
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="about-cell about-cell--stat"
+              style={{ gridArea: `s${i + 1}` } as CSSProperties}
+            >
+              <p className="text-[13px] font-medium text-text-muted">{s.label}</p>
+              <p className="about-cell__num">
+                <NumberTicker value={s.value} delay={0.15 + i * 0.12} />
+              </p>
+              <p className="mt-auto pt-4 text-[14px] leading-[1.5] text-text-muted">{s.context}</p>
+            </div>
+          ))}
         </InView>
       </div>
     </section>
