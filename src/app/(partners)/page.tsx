@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AboutFlow } from "@/components/about-flow";
+import { MissionGate } from "@/components/mission-toggle";
 import { AboutSection } from "@/components/about-section";
 import { HeroCity } from "@/components/hero-city";
 import { HoverArrow } from "@/components/hover-arrow";
@@ -43,7 +43,7 @@ export default function Home() {
       <AboutSection />
 
       {/* Our mission: Build → Deliver → Improve, scroll-driven particle story on deep navy. */}
-      <AboutFlow />
+      <MissionGate />
 
       {/* Products: pinned, scroll-driven walkthrough of all five products. */}
       <ProductScroll />

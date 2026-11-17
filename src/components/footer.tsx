@@ -4,6 +4,7 @@ import { CurrentYear } from "@/components/current-year";
 import { ExternalArrow, HoverArrow, newTab } from "@/components/hover-arrow";
 import { products } from "@/lib/products";
 import { Logo } from "@/components/logo";
+import { MissionToggle } from "@/components/mission-toggle";
 import { container } from "@/lib/layout";
 import { site } from "@/lib/site";
 
@@ -292,6 +293,7 @@ export function Footer({ audience = "partners" }: { audience?: Audience }) {
               <span>
                 TechCity © <CurrentYear />
               </span>
+              <MissionToggle />
             </p>
           </div>
         </div>
