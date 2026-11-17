@@ -77,8 +77,15 @@ async function makeDots(step: number) {
 
 const byStatus = (s: ProjectStatus) => projects.filter((p) => p.status === s);
 
-export function ProjectsGlobe() {
-  const [status, setStatus] = useState<ProjectStatus>("ongoing");
+const ALL_STATUSES = projectStatuses.map((s) => s.id);
+
+/**
+ * `statuses` picks which tabs show (all three by default, as on the home page).
+ * With one, the tab band is left out and only that status's projects are listed
+ * and marked, as on the /projects/<status> pages.
+ */
+export function ProjectsGlobe({ statuses = ALL_STATUSES }: { statuses?: ProjectStatus[] }) {
+  const [status, setStatus] = useState<ProjectStatus>(statuses[0]);
   const statusRef = useRef(status);
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -329,57 +336,63 @@ export function ProjectsGlobe() {
     wrapRef.current?.dispatchEvent(new Event("projects:switch"));
   }, [status]);
 
-  const counts = Object.fromEntries(projectStatuses.map((s) => [s.id, byStatus(s.id).length])) as Record<
-    ProjectStatus,
-    number
-  >;
+  const counts = Object.fromEntries(projectStatuses.map((s) => [s.id, byStatus(s.id).length])) as Record<ProjectStatus, number>;
 
   return (
     <div className="flex flex-1 flex-col">
-      <div role="tablist" aria-label="Project status" className="grid grid-cols-3 border-y border-line">
-        {projectStatuses.map((s) => {
-          const active = s.id === status;
-          return (
-            <button
-              key={s.id}
-              type="button"
-              role="tab"
-              id={`projects-tab-${s.id}`}
-              aria-selected={active}
-              aria-controls="projects-panel"
-              onClick={() => {
-                setHovered(null);
-                setStatus(s.id);
-              }}
-              className="projects-tab group relative px-3 py-5 text-center sm:py-6"
-              data-active={active || undefined}
-            >
-              <span
-                className={`block text-[clamp(28px,2.8vw,40px)] leading-none font-normal tracking-[-0.03em] tabular-nums transition-colors duration-300 ${
-                  active ? "text-text" : "text-text-muted/70 group-hover:text-text-muted"
-                }`}
-              >
-                {counts[s.id]}
-              </span>
-              <span
-                className={`mt-2.5 inline-flex items-center gap-2 text-[14px] leading-[1.5] font-medium transition-colors duration-300 ${
-                  active ? "text-text" : "text-text-muted"
-                }`}
-              >
-                <i className="h-2 w-2 rounded-full" style={{ background: s.color }} aria-hidden="true" />
-                {s.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {statuses.length > 1 && (
+        <div
+          role="tablist"
+          aria-label="Project status"
+          className="grid border-y border-line"
+          style={{ gridTemplateColumns: `repeat(${statuses.length}, minmax(0, 1fr))` }}
+        >
+          {projectStatuses
+            .filter((s) => statuses.includes(s.id))
+            .map((s) => {
+              const active = s.id === status;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="tab"
+                  id={`projects-tab-${s.id}`}
+                  aria-selected={active}
+                  aria-controls="projects-panel"
+                  onClick={() => {
+                    setHovered(null);
+                    setStatus(s.id);
+                  }}
+                  className="projects-tab group relative px-3 py-5 text-center sm:py-6"
+                  data-active={active || undefined}
+                >
+                  <span
+                    className={`block text-[clamp(28px,2.8vw,40px)] leading-none font-normal tracking-[-0.03em] tabular-nums transition-colors duration-300 ${
+                      active ? "text-text" : "text-text-muted/70 group-hover:text-text-muted"
+                    }`}
+                  >
+                    {counts[s.id]}
+                  </span>
+                  <span
+                    className={`mt-2.5 inline-flex items-center gap-2 text-[14px] leading-[1.5] font-medium transition-colors duration-300 ${
+                      active ? "text-text" : "text-text-muted"
+                    }`}
+                  >
+                    <i className="h-2 w-2 rounded-full" style={{ background: s.color }} aria-hidden="true" />
+                    {s.label}
+                  </span>
+                </button>
+              );
+            })}
+        </div>
+      )}
 
       <div
         ref={wrapRef}
         id="projects-panel"
-        role="tabpanel"
-        aria-labelledby={`projects-tab-${status}`}
-        className="relative flex min-h-[460px] flex-1 flex-col overflow-hidden md:min-h-[520px]"
+        role={statuses.length > 1 ? "tabpanel" : undefined}
+        aria-labelledby={statuses.length > 1 ? `projects-tab-${status}` : undefined}
+        className={`relative flex min-h-[460px] flex-1 flex-col overflow-hidden md:min-h-[520px] ${statuses.length > 1 ? "" : "border-t border-line"}`}
       >
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ opacity: 0 }} aria-hidden="true" />
         {/* Projects list: above the globe below md, a column on the left from md (it sets the panel's height). */}

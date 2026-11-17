@@ -1,0 +1,66 @@
+/* Pinned, bottom bleed: one gutter left, right and top, off the bottom. */
+.tc-ongoing .og-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  right: 48px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-ongoing .ss-stage[data-layout='compact'] .og-win {
+  top: 16px;
+  left: 16px;
+  right: 16px;
+}
+.tc-ongoing .og-body {
+  min-height: 540px;
+  padding: 16px 16px 0;
+  background: var(--ss-surface);
+}
+.tc-ongoing .og-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 8px 14px;
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+.tc-ongoing .og-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--ss-text);
+  white-space: nowrap;
+}
+.tc-ongoing .og-count .ss-roll {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ss-text-strong);
+}
+.tc-ongoing .og-meter {
+  flex: 1;
+}
+.tc-ongoing .og-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 8px;
+}
+.tc-ongoing .og-title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.tc-ongoing .og-sub {
+  font-size: 12px;
+}
+
+.tc-ongoing .og-next {
+  margin: 10px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ss-text-faint);
+}
+.tc-ongoing .og-later {
+  opacity: 0.7;
+}

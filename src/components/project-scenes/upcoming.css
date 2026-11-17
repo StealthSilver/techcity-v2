@@ -1,0 +1,71 @@
+/* Pinned, bottom bleed: one gutter left, right and top, off the bottom. */
+.tc-upcoming .uc-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  right: 48px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-upcoming .ss-stage[data-layout='compact'] .uc-win {
+  top: 16px;
+  left: 16px;
+  right: 16px;
+}
+.tc-upcoming .uc-body {
+  min-height: 540px;
+  padding: 16px 16px 0;
+  background: var(--ss-surface);
+}
+.tc-upcoming .uc-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px 14px;
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+.tc-upcoming .uc-what {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.tc-upcoming .uc-name {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ss-text-strong);
+}
+.tc-upcoming .uc-meta {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ss-text);
+}
+.tc-upcoming .uc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 8px;
+}
+.tc-upcoming .uc-title {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.tc-upcoming .uc-sub {
+  font-size: 12px;
+}
+
+.tc-upcoming .uc-next {
+  margin: 10px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ss-text-faint);
+}
+.tc-upcoming .uc-later {
+  opacity: 0.7;
+}

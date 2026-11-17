@@ -1,0 +1,77 @@
+/* Pinned, bottom bleed: one gutter left, right and top, off the bottom. */
+.tc-completed .cp-win {
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  right: 48px;
+  box-shadow: var(--ss-shadow-hero);
+}
+.tc-completed .ss-stage[data-layout='compact'] .cp-win {
+  top: 16px;
+  left: 16px;
+  right: 16px;
+}
+.tc-completed .cp-body {
+  min-height: 540px;
+  padding: 16px 16px 0;
+  background: var(--ss-surface);
+}
+.tc-completed .cp-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px 14px;
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+.tc-completed .cp-name {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ss-text-strong);
+}
+.tc-completed .ss-stage[data-layout='compact'] .cp-name {
+  display: none;
+}
+.tc-completed .cp-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 8px 10px;
+}
+.tc-completed .cp-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ss-text);
+}
+.tc-completed .cp-big {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ss-text-strong);
+  white-space: nowrap;
+}
+.tc-completed .ss-stage[data-layout='compact'] .cp-big {
+  font-size: 30px;
+}
+.tc-completed .cp-from {
+  font-size: 12px;
+  color: var(--ss-text-faint);
+}
+.tc-completed .cp-chart {
+  margin: 4px 8px 0;
+}
+.tc-completed .cp-tracks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 14px 8px 0;
+}
+
+/* On a phone the chart and its figure carry it; the tracks are on the page. */
+.tc-completed .ss-stage[data-layout='compact'] .cp-tracks {
+  display: none;
+}
