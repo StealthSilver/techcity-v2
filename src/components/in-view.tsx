@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 /**
  * Marks its box with `data-in` the first time it scrolls into view, then stops
@@ -10,10 +10,12 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export function InView({
   className,
   threshold = 0.35,
+  style,
   children,
 }: {
   className?: string;
   threshold?: number;
+  style?: CSSProperties;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -35,7 +37,7 @@ export function InView({
   }, [threshold]);
 
   return (
-    <div ref={ref} className={className} data-in={inView || undefined}>
+    <div ref={ref} className={className} style={style} data-in={inView || undefined}>
       {children}
     </div>
   );
