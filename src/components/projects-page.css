@@ -14,16 +14,13 @@
   color: var(--text-muted);
 }
 
-/* Hero picture: a tinted panel; the scene is pinned to its bottom-right corner,
+/* Hero picture: a plain subdued panel; the scene is pinned to its bottom-right corner,
    so its window runs off the bottom and stops at the guide line on the right. */
 .pj-hero__picture {
   position: relative;
   overflow: hidden;
   border-top: 1px solid var(--line);
-  background:
-    radial-gradient(70% 60% at 90% 100%, color-mix(in srgb, var(--g-honey) 28%, transparent), transparent 70%),
-    radial-gradient(80% 70% at 10% 0%, color-mix(in srgb, var(--g-lavender) 30%, transparent), transparent 70%),
-    var(--surface-subdued);
+  background: var(--surface-subdued);
 }
 .pj-hero__picture .project-scene {
   width: min(100%, 600px);

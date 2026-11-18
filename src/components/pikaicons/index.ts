@@ -1,0 +1,5 @@
+export { EnvelopeSolidIcon } from "./envelope-default-solid"
+export { InstagramSolidIcon } from "./instagram-solid"
+export { LinkedinSolidIcon } from "./linkedin-solid"
+export { XComSolidIcon } from "./x-com-solid"
+export { YoutubeSolidIcon } from "./youtube-solid"

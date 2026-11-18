@@ -96,6 +96,10 @@
   html {
     background: var(--bg);
   }
+  /* Past the footer (set by components/overscroll-color): the footer's navy. */
+  html[data-overscroll="footer"] {
+    background: var(--accent);
+  }
 
   body {
     background: var(--bg);
@@ -462,18 +466,6 @@
   isolation: isolate;
   overflow: hidden;
   background: var(--surface-subdued);
-}
-/* Soft lavender → honey glow rising behind the globe, wider than the page column. */
-.projects-section::before {
-  content: "";
-  position: absolute;
-  inset: auto -10% 0;
-  height: 70%;
-  z-index: -1;
-  background:
-    radial-gradient(38% 60% at 50% 100%, color-mix(in srgb, var(--g-honey) 55%, transparent), transparent 70%),
-    radial-gradient(60% 85% at 50% 100%, color-mix(in srgb, var(--g-lavender) 45%, transparent), transparent 72%);
-  pointer-events: none;
 }
 .projects-tab + .projects-tab {
   border-left: 1px solid var(--line);
@@ -1223,9 +1215,7 @@ a:focus-visible > .product-tile {
   position: relative;
   height: 150px;
   border-radius: 10px;
-  background:
-    radial-gradient(60% 80% at 30% 30%, color-mix(in srgb, var(--c1) 22%, transparent), transparent 70%),
-    var(--surface-subdued);
+  background: var(--surface-subdued);
   box-shadow: inset 0 0 0 1px var(--line);
 }
 .ill-video__play {
@@ -3065,10 +3055,7 @@ a:focus-visible > .product-tile {
 /* The stat tile: the grid's one inverted card. */
 .bento-card[data-kind="stat"] {
   color: #fff;
-  background:
-    radial-gradient(90% 70% at 100% 100%, color-mix(in srgb, var(--g-periwinkle) 45%, transparent), transparent 70%),
-    radial-gradient(60% 50% at 0% 100%, color-mix(in srgb, var(--g-amber) 22%, transparent), transparent 70%),
-    var(--accent);
+  background: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
 }
 .bento-card[data-kind="stat"]:hover {
@@ -3314,8 +3301,7 @@ a:focus-visible > .product-tile {
 .partners-wall {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
+  overflow: hidden;
 }
 @media (min-width: 768px) {
   .partners-wall {
@@ -3334,6 +3320,10 @@ a:focus-visible > .product-tile {
   min-height: 176px;
   padding: 20px;
   background: var(--bg);
+  /* Rules on the right and bottom; the wall clips the ones on its outer edges. */
+  box-shadow:
+    1px 0 0 var(--line),
+    0 1px 0 var(--line);
   animation: projects-card-in 500ms var(--ease-out) both;
   animation-delay: calc(var(--i) * 35ms);
   transition: background-color 250ms var(--ease-out);
@@ -3344,7 +3334,7 @@ a:focus-visible > .product-tile {
     padding: 28px;
   }
 }
-.partners-wall__cell:not(.partners-wall__cta):hover {
+.partners-wall__cell:hover {
   background: var(--surface-subdued);
 }
 .partners-wall__logo {
@@ -3371,23 +3361,10 @@ a:focus-visible > .product-tile {
     opacity: 1;
   }
 }
-.partners-wall__cta {
-  grid-column: span var(--s2);
-  gap: 16px;
-  background:
-    radial-gradient(80% 120% at 100% 100%, color-mix(in srgb, var(--g-honey) 30%, transparent), transparent 70%),
-    var(--surface);
-}
 @media (min-width: 768px) {
-  .partners-wall__cta {
-    grid-column: span var(--s3);
   }
-}
 @media (min-width: 1024px) {
-  .partners-wall__cta {
-    grid-column: span var(--s4);
   }
-}
 @media (prefers-reduced-motion: reduce) {
   .partners-wall__cell {
     animation: none;

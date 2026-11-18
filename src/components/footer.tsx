@@ -1,5 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ComponentType, SVGProps } from "react";
+import {
+  EnvelopeSolidIcon,
+  InstagramSolidIcon,
+  LinkedinSolidIcon,
+  XComSolidIcon,
+  YoutubeSolidIcon,
+} from "@/components/pikaicons";
+import { OverscrollColor } from "@/components/overscroll-color";
 import { CurrentYear } from "@/components/current-year";
 import { ExternalArrow, HoverArrow, newTab } from "@/components/hover-arrow";
 import { products } from "@/lib/products";
@@ -79,49 +88,13 @@ const columns: FooterGroup[][] = [
   ],
 ];
 
-/** Social links. Swap the `#` hrefs once the real profiles are ready. */
-const socials: { label: string; href: string; icon: React.ReactNode }[] = [
-  {
-    label: "X",
-    href: "#",
-    icon: (
-      <path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.4 4.74H5.57l11.1 14.43Z" />
-    ),
-  },
-  {
-    label: "YouTube",
-    href: "#",
-    icon: (
-      <path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z" />
-    ),
-  },
-  {
-    label: "Instagram",
-    href: "#",
-    icon: (
-      <path
-        fillRule="evenodd"
-        d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm0 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Zm5.25-3.75a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5Z"
-      />
-    ),
-  },
-  {
-    label: "LinkedIn",
-    href: "#",
-    icon: (
-      <path d="M20 2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM8.34 18.5H5.67V9.94h2.67v8.56ZM7 8.77a1.55 1.55 0 1 1 0-3.1 1.55 1.55 0 0 1 0 3.1Zm11.5 9.73h-2.66v-4.16c0-1 0-2.27-1.38-2.27-1.39 0-1.6 1.08-1.6 2.2v4.23H10.2V9.94h2.55v1.17h.04a2.8 2.8 0 0 1 2.52-1.39c2.7 0 3.19 1.78 3.19 4.09v4.69Z" />
-    ),
-  },
-  {
-    label: "Email",
-    href: `mailto:${site.email}`,
-    icon: (
-      <path
-        fillRule="evenodd"
-        d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2.4V18h16V6.4l-8 5.6-8-5.6ZM18.2 6H5.8L12 10.35 18.2 6Z"
-      />
-    ),
-  },
+/** Social links (Pikaicons, solid). Swap the `#` hrefs once the real profiles are ready. */
+const socials: { label: string; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+  { label: "X", href: "#", Icon: XComSolidIcon },
+  { label: "YouTube", href: "#", Icon: YoutubeSolidIcon },
+  { label: "Instagram", href: "#", Icon: InstagramSolidIcon },
+  { label: "LinkedIn", href: "#", Icon: LinkedinSolidIcon },
+  { label: "Email", href: `mailto:${site.email}`, Icon: EnvelopeSolidIcon },
 ];
 
 const linkClass =
@@ -212,6 +185,7 @@ export function Footer({ audience = "partners" }: { audience?: Audience }) {
   return (
     <div id="contact" className="relative z-10 scroll-mt-16">
       <Cta audience={audience} />
+      <OverscrollColor />
       <footer className="bg-accent text-white">
         <div className={container}>
           <nav
@@ -272,15 +246,7 @@ export function Footer({ audience = "partners" }: { audience?: Audience }) {
                         ? { target: "_blank", rel: "noopener noreferrer" }
                         : {})}
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        width={16}
-                        height={16}
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        {s.icon}
-                      </svg>
+                      <s.Icon width={18} height={18} aria-hidden="true" />
                     </a>
                   </li>
                 ))}

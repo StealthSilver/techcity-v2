@@ -1,0 +1,28 @@
+{
+  "framework": "react-tsx",
+  "dir": "src/components/pikaicons",
+  "importAlias": "@/components/pikaicons",
+  "variant": "stroke",
+  "icons": {
+    "envelope-default-solid": {
+      "name": "envelope-default",
+      "variant": "solid"
+    },
+    "instagram-solid": {
+      "name": "instagram",
+      "variant": "solid"
+    },
+    "linkedin-solid": {
+      "name": "linkedin",
+      "variant": "solid"
+    },
+    "x-com-solid": {
+      "name": "x-com",
+      "variant": "solid"
+    },
+    "youtube-solid": {
+      "name": "youtube",
+      "variant": "solid"
+    }
+  }
+}

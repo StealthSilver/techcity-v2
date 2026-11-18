@@ -1,17 +1,14 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- local, pre-trimmed logo files */
-import Link from "next/link";
 import { useState, type CSSProperties } from "react";
-import { HoverArrow } from "@/components/hover-arrow";
 import { colleges, industry } from "@/lib/partners";
 
 /**
  * Partners: the Projects-style tab band over a logo wall. Every partner gets
  * one cell in a ruled grid: its logo in one shared treatment (grayscale,
  * colour on hover, so no brand fights the page's accent), its name and its
- * place or focus. A "partner with us" cell fills out the last row, spanning
- * whatever is left at each column count (2, 3 or 4).
+ * place or focus. Rules are drawn on the cells, so a short last row ends cleanly.
  */
 
 const tabs = [
@@ -20,26 +17,20 @@ const tabs = [
     label: "College partners",
     rows: colleges,
     color: "#1C257D",
-    cta: "Bring TechCity to your campus.",
   },
   {
     id: "industry",
     label: "Industry partners",
     rows: industry,
     color: "#F59E0B",
-    cta: "Help shape what students learn.",
   },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
 
-/** Columns left empty in the last row at `cols` columns (a full row when none are). */
-const rest = (n: number, cols: number) => cols - (n % cols);
-
 export function PartnersCloud() {
   const [tabId, setTabId] = useState<TabId>("colleges");
   const tab = tabs.find((t) => t.id === tabId) ?? tabs[0];
-  const n = tab.rows.length;
 
   return (
     <div>
@@ -91,23 +82,6 @@ export function PartnersCloud() {
               </span>
             </li>
           ))}
-          <li
-            className="partners-wall__cell partners-wall__cta"
-            style={
-              {
-                "--i": n,
-                "--s2": rest(n, 2),
-                "--s3": rest(n, 3),
-                "--s4": rest(n, 4),
-              } as CSSProperties
-            }
-          >
-            <p className="text-[16px] leading-[1.45] font-medium tracking-[-0.01em] text-text">{tab.cta}</p>
-            <Link href="#contact" className="btn btn-primary mt-auto self-start">
-              Partner with us
-              <HoverArrow />
-            </Link>
-          </li>
         </ul>
       </div>
     </div>

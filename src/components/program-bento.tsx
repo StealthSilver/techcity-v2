@@ -56,7 +56,8 @@ type Ribbon = {
 };
 export type Scene = { blobs: Blob[]; ribbons: Ribbon[] };
 
-const scenes: Record<string, Scene> = {
+/** Colour-wash art for the cards; not shown at the moment (kept for later). */
+export const scenes: Record<string, Scene> = {
   // Warm amber sweep from the top-right over a lavender base (like Stripe's lead card).
   trainers: {
     blobs: [
@@ -273,7 +274,6 @@ export function ProgramBento() {
             data-kind={stat ? "stat" : undefined}
             data-program={p.anchor}
           >
-            {!stat && <SceneArt id={p.anchor} scene={scenes[p.anchor]} />}
             <CardCopy p={p} wide={p.size === "wide"} />
             <div className="bento-ill" data-program={p.anchor}>
               {stat ? <PlacingStat /> : Item && <Item />}
