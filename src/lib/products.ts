@@ -32,7 +32,7 @@ export const products: Product[] = [
     description:
       "Courses, assignments, attendance and progress in one place, so faculty can run every cohort and students always know what’s next.",
     features: ["Courses and assignments", "Attendance and grading", "Progress for every batch"],
-    status: "Coming soon",
+    status: "Live",
     href: productUrl("setu"),
   },
   {
@@ -71,7 +71,7 @@ export const products: Product[] = [
     description:
       "A few LeetCode-style problems every day, instant feedback on every run, and streaks that keep students coming back.",
     features: ["Daily problem sets", "Instant test feedback", "Streaks and progress"],
-    status: "Coming soon",
+    status: "Live",
     href: productUrl("riyaaz"),
   },
   {
@@ -84,7 +84,7 @@ export const products: Product[] = [
     description:
       "Cohort-based video courses paired with hands-on labs, so students learn alongside their batch and finish every chapter with work they built.",
     features: ["Video chapters with labs", "Live cohorts", "Work to show at the end"],
-    status: "Coming soon",
+    status: "Live",
     href: productUrl("kaksha"),
   },
 ];

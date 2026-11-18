@@ -52,12 +52,6 @@ const productSections: NavSection[] = [
     items: [
       { label: "Spardha", product: "spardha", description: "Tests and campus contests", href: productUrl("spardha"), external: true },
       { label: "Marg", product: "marg", description: "Learning paths and roadmaps", nowrapDescription: true, href: productUrl("marg"), external: true },
-    ],
-  },
-  {
-    title: "Coming soon",
-    accent: true,
-    items: [
       { label: "Setu", product: "setu", description: "Learning management", href: productUrl("setu"), external: true },
       { label: "Riyaaz", product: "riyaaz", description: "Daily coding practice", href: productUrl("riyaaz"), external: true },
       { label: "Kaksha", product: "kaksha", description: "Cohort-based video courses", nowrapDescription: true, href: productUrl("kaksha"), external: true },

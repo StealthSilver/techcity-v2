@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MissionGate } from "@/components/mission-toggle";
 import { AboutSection } from "@/components/about-section";
 import { HeroCity } from "@/components/hero-city";
 import { HoverArrow } from "@/components/hover-arrow";
@@ -42,8 +41,7 @@ export default function Home() {
       {/* About: the company's story in four chapters, then the numbers. */}
       <AboutSection />
 
-      {/* Our mission: Build → Deliver → Improve, scroll-driven particle story on deep navy. */}
-      <MissionGate />
+      {/* Our mission (components/about-flow, gated by components/mission-toggle) is kept in the code but not shown for now. */}
 
       {/* Products: pinned, scroll-driven walkthrough of all five products. */}
       <ProductScroll />
